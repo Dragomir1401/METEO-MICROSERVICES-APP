@@ -3,14 +3,24 @@ from bson.objectid import ObjectId
 from models import tari
 
 cntrs_bp = Blueprint('countries', __name__)
+template_fields = {"_id": 1, "nume_tara": 1, "latitudine": 1, "longitudine": 1}
+
+def contains_all_fields(data):
+    # Check if the required fields are present in the data
+    if not data or "nume_tara" not in data or "latitudine" not in data or "longitudine" not in data:
+        return False
+    return True
+
+def is_valid_id(id):
+    # Check if the ID is a valid ObjectId
+    if not ObjectId.is_valid(id):
+        return False
+    return True
 
 @cntrs_bp.route('/api/countries/clear', methods=['DELETE'])
 def clear_countries():
     # Use delete_many() method to delete all documents from the collection
     result = tari.delete_many({})
-
-    # Print the number of deleted documents
-    print(f"Cleared {result.deleted_count} countries.")
     
     # Return a response
     return jsonify({"message": "All countries cleared"}), 200
@@ -21,7 +31,7 @@ def add_country():
     data = request.json
 
     # Check if the required fields are present in the data
-    if not data or "nume_tara" not in data or "latitudine" not in data or "longitudine" not in data:
+    if not contains_all_fields(data):
         return jsonify({"error": "Missing required fields"}), 400
 
     # Check if the country already exists and return an error if it does
@@ -38,7 +48,7 @@ def add_country():
 @cntrs_bp.route('/api/countries', methods=['GET'])
 def get_countries():
     # Specify the fields to include in the response
-    countries = list(tari.find({}, {"_id": 1, "nume_tara": 1, "latitudine": 1, "longitudine": 1}))
+    countries = list(tari.find({}, template_fields))
 
     # Translate all the fields to the required format
     for country in countries:
@@ -57,11 +67,11 @@ def update_country(id):
     data = request.json
 
     # Check if the required fields are present in the data
-    if not data or "nume_tara" not in data or "latitudine" not in data or "longitudine" not in data:
+    if not contains_all_fields(data):
         return jsonify({"error": "Missing required fields"}), 400
 
     # Check for bad id
-    if not ObjectId.is_valid(id):
+    if not is_valid_id(id):
         return jsonify({"error": "Invalid ID"}), 400
 
     # Update the country with the specified ID
@@ -78,7 +88,7 @@ def update_country(id):
 @cntrs_bp.route('/api/countries/<id>', methods=['DELETE'])
 def delete_country(id):
     # Check for 400 error
-    if not ObjectId.is_valid(id):
+    if not is_valid_id(id):
         return jsonify({"error": "Invalid ID"}), 400
     
     # Delete the country with the specified ID
