@@ -6,26 +6,30 @@ BASE_URL_CITIES = "http://localhost:5001/api/cities"
 
 class TestCitiesAPI(unittest.TestCase):
     def setUp(self):
-        """Clear the database before each test and create a test country"""
+        """Clear the database before each test"""
         # Clear countries and cities
-        requests.delete(f"{BASE_URL_COUNTRIES}/clear")
-        requests.delete(f"{BASE_URL_CITIES}/clear")
+        clear_countries_response = requests.delete(f"{BASE_URL_COUNTRIES}/clear")
+        self.assertEqual(clear_countries_response.status_code, 200, "Failed to clear countries")
 
-        # Create a test country
-        payload = {"nume": "Romania", "lat": 45.9432, "lon": 24.9668}
+        clear_cities_response = requests.delete(f"{BASE_URL_CITIES}/clear")
+        self.assertEqual(clear_cities_response.status_code, 200, "Failed to clear cities")
+
+        # Create a base country for tests
+        payload = {"nume_tara": "Romania", "latitudine": 45.9432, "longitudine": 24.9668}
         response = requests.post(BASE_URL_COUNTRIES, json=payload)
-        self.country_id = response.json()["id"]
+        self.assertEqual(response.status_code, 201, f"Failed to create base test country: {response.json()}")
+        self.base_country_id = response.json()["id"]
 
     def test_post_city_success(self):
         """Test adding a city (Success Case)"""
-        payload = {"idTara": self.country_id, "nume": "Bucharest", "lat": 44.4268, "lon": 26.1025}
+        payload = {"id_tara": self.base_country_id, "nume_oras": "Bucharest", "latitudine": 44.4268, "longitudine": 26.1025}
         response = requests.post(BASE_URL_CITIES, json=payload)
         self.assertEqual(response.status_code, 201, "Failed to add city (Success Case)")
         print(f"POST /cities SUCCESS: {response.json()}")
 
     def test_post_city_invalid_country(self):
         """Test adding a city with an invalid country ID (Fail Case)"""
-        payload = {"idTara": "000000000000000000000000", "nume": "Invalid City", "lat": 0.0, "lon": 0.0}
+        payload = {"id_tara": "000000000000000000000000", "nume_oras": "Invalid City", "latitudine": 0.0, "longitudine": 0.0}
         response = requests.post(BASE_URL_CITIES, json=payload)
         self.assertEqual(response.status_code, 404, "Invalid country ID not handled")
         print(f"POST /cities FAIL (Invalid Country): {response.json()}")
@@ -33,7 +37,7 @@ class TestCitiesAPI(unittest.TestCase):
     def test_get_cities(self):
         """Test retrieving all cities"""
         # Add a city
-        payload = {"idTara": self.country_id, "nume": "Cluj-Napoca", "lat": 46.7712, "lon": 23.6236}
+        payload = {"id_tara": self.base_country_id, "nume_oras": "Cluj-Napoca", "latitudine": 46.7712, "longitudine": 23.6236}
         requests.post(BASE_URL_CITIES, json=payload)
 
         response = requests.get(BASE_URL_CITIES)
@@ -42,18 +46,23 @@ class TestCitiesAPI(unittest.TestCase):
 
     def test_get_cities_by_country(self):
         """Test retrieving cities by country"""
-        # Add a city
-        payload = {"idTara": self.country_id, "nume": "Timisoara", "lat": 45.7489, "lon": 21.2087}
-        requests.post(BASE_URL_CITIES, json=payload)
+        # Use the country created in setUp
+        country_id = self.base_country_id
 
-        response = requests.get(f"{BASE_URL_CITIES}/country/{self.country_id}")
+        # Add a city to the existing country
+        city_payload = {"id_tara": country_id, "nume_oras": "Timisoara", "latitudine": 45.7489, "longitudine": 21.2087}
+        city_response = requests.post(BASE_URL_CITIES, json=city_payload)
+        self.assertEqual(city_response.status_code, 201, f"Failed to add city: {city_response.json()}")
+
+        # Test retrieval of cities by country
+        response = requests.get(f"{BASE_URL_CITIES}/country/{country_id}")
         self.assertEqual(response.status_code, 200, "Failed to retrieve cities by country")
-        print(f"GET /cities/country/{self.country_id} SUCCESS: {response.json()}")
+        print(f"GET /cities/country/{country_id} SUCCESS: {response.json()}")
 
     def test_delete_city_success(self):
         """Test deleting a city (Success Case)"""
         # Add a city
-        payload = {"idTara": self.country_id, "nume": "Sibiu", "lat": 45.7983, "lon": 24.1256}
+        payload = {"id_tara": self.base_country_id, "nume_oras": "Sibiu", "latitudine": 45.7983, "longitudine": 24.1256}
         add_response = requests.post(BASE_URL_CITIES, json=payload)
         city_id = add_response.json()["id"]
 
