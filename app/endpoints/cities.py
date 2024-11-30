@@ -4,6 +4,34 @@ from models import orase, tari
 
 ct_bp = Blueprint('cities', __name__)
 
+def contains_all_fields(data):
+    # Check if the required fields are present in the data
+    if not data or "id_tara" not in data or "nume_oras" not in data or "latitudine" not in data or "longitudine" not in data:
+        return False
+    return True
+
+def is_valid_id(id):
+    # Check if the ID is a valid ObjectId
+    if not ObjectId.is_valid(id):
+        return False
+    return True
+
+def find_entity_by_id(id, countryOrCity):
+    # Find the city with the specified ID based on the countryOrCity parameter
+    if countryOrCity == "country":
+        return tari.find_one({"_id": ObjectId(id)})
+    elif countryOrCity == "city":
+        return orase.find_one({"_id": ObjectId(id)})
+    return None
+
+def translate_fields(city, id_tara):
+    # Translate all the fields to the required format
+    city["id"] = str(city.pop("_id"))
+    city["idTara"] = id_tara
+    city["nume"] = city.pop("nume_oras")
+    city["lat"] = city.pop("latitudine")
+    city["lon"] = city.pop("longitudine")
+
 @ct_bp.route('/api/cities/clear', methods=['DELETE'])
 def clear_cities():
     # Clear all cities from the database
@@ -16,15 +44,15 @@ def add_city():
     data = request.json
 
     # Check if the required fields are present in the data
-    if not data or "id_tara" not in data or "nume_oras" not in data or "latitudine" not in data or "longitudine" not in data:
+    if not contains_all_fields(data):
         return jsonify({"error": "Missing required fields"}), 400
 
     # Check if the id of the country is a valid ObjectId
-    if not ObjectId.is_valid(data["id_tara"]):
+    if not is_valid_id(data["id_tara"]):
         return jsonify({"error": "Invalid country ID"}), 400
 
     # Check if the country exists
-    if not tari.find_one({"_id": ObjectId(data["id_tara"])}):
+    if find_entity_by_id(data["id_tara"], "country") is None:
         return jsonify({"error": "Country not found"}), 404
 
     # Check if the city already exists in the country
@@ -45,11 +73,7 @@ def get_cities():
 
     # Translate all the fields to the required format
     for city in cities:
-        city["id"] = str(city.pop("_id"))
-        city["idTara"] = city.pop("id_tara")
-        city["nume"] = city.pop("nume_oras")
-        city["lat"] = city.pop("latitudine")
-        city["lon"] = city.pop("longitudine")
+        translate_fields(city, city.pop("id_tara"))
 
     # Return the list of cities
     return jsonify(cities), 200
@@ -57,11 +81,11 @@ def get_cities():
 @ct_bp.route('/api/cities/country/<id_tara>', methods=['GET'])
 def get_cities_by_country(id_tara):
     # Check if the id of the country is a valid ObjectId
-    if not ObjectId.is_valid(id_tara):
+    if not is_valid_id(id_tara):
         return jsonify({"error": "Invalid country ID"}), 400
 
     # Check if city exists
-    if not tari.find_one({"_id": ObjectId(id_tara)}):
+    if find_entity_by_id(id_tara, "country") is None:
         return jsonify({"error": "Country not found"}), 404
 
     # Get the cities for the specified country
@@ -69,11 +93,7 @@ def get_cities_by_country(id_tara):
 
     # Translate all the fields to the required format
     for city in cities:
-        city["idTara"] = id_tara
-        city["id"] = str(city.pop("_id"))
-        city["nume"] = city.pop("nume_oras")
-        city["lat"] = city.pop("latitudine")
-        city["lon"] = city.pop("longitudine")
+        translate_fields(city, id_tara)
 
     # Return the list of cities
     return jsonify(cities), 200
@@ -85,15 +105,15 @@ def update_city(id):
     data = request.json
 
     # Check if the required fields are present in the data
-    if not data or "id_tara" not in data or "nume_oras" not in data or "latitudine" not in data or "longitudine" not in data:
+    if not contains_all_fields(data):
         return jsonify({"error": "Missing required fields"}), 400
 
     # Check if the country exists
-    if not tari.find_one({"_id": ObjectId(data["id_tara"])}):
+    if find_entity_by_id(data["id_tara"], "country") is None:
         return jsonify({"error": "Country not found"}), 404
 
     # Check for bad id
-    if not ObjectId.is_valid(id):
+    if not is_valid_id(id):
         return jsonify({"error": "Invalid city ID"}), 400
 
     # Update the city with the specified ID
@@ -110,7 +130,7 @@ def update_city(id):
 @ct_bp.route('/api/cities/<id>', methods=['DELETE'])
 def delete_city(id):
     # Check if id is a valid ObjectId
-    if not ObjectId.is_valid(id):
+    if not is_valid_id(id):
         return jsonify({"error": "Invalid city ID"}), 400
 
     # Delete the city with the specified ID
