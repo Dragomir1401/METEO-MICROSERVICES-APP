@@ -19,6 +19,7 @@ class TestCountriesAPI(unittest.TestCase):
         payload = {"nume_tara": "United States", "latitudine": 37.0902, "longitudine": -95.7129}
         response = requests.post(COUNTRIES_URL, json=payload)
         self.assertEqual(response.status_code, 201, f"Failed to set up test country: {response.json()}")
+        self.second_country_id = response.json()["id"]
 
     def tearDown(self):
         # Separate test cases with a line

@@ -1,0 +1,21 @@
+{'id_tara': '123456789101112131415167', 'nume_oras': 'Nonexistent Country City', 'latitudine': 0.0, 'longitudine': 0.0}
+Country not found
+{'id_tara': '674b58eccabb41c2812ee1a2', 'nume_oras': 'Missing Fields City'}
+Missing required fields
+{'id_tara': '674b58eccabb41c2812ee1a5', 'nume_oras': 'Nonexistent City', 'latitudine': 0.0, 'longitudine': 0.0}
+{'id_tara': '674b58eccabb41c2812ee1a8', 'nume_oras': 'Cluj-Napoca Updated', 'latitudine': 47.0, 'longitudine': 24.0}
+Invalid city ID
+{'id_tara': '123456789101112131415167', 'nume_oras': 'Nonexistent Country City', 'latitudine': 0.0, 'longitudine': 0.0}
+Country not found
+{'id_tara': '674b59442f5050db57fd0730', 'nume_oras': 'Missing Fields City'}
+Missing required fields
+{'id_tara': '674b59442f5050db57fd0733', 'nume_oras': 'Nonexistent City', 'latitudine': 0.0, 'longitudine': 0.0}
+{'id_tara': '674b59452f5050db57fd0736', 'nume_oras': 'Cluj-Napoca Updated', 'latitudine': 47.0, 'longitudine': 24.0}
+Invalid city ID
+City ID: <Response [201]>
+{'id_tara': '123456789101112131415167', 'nume_oras': 'Nonexistent Country City', 'latitudine': 0.0, 'longitudine': 0.0}
+Country not found
+{'id_tara': '674b59602f5050db57fd0756', 'nume_oras': 'Missing Fields City'}
+Missing required fields
+{'id_tara': '674b59602f5050db57fd0759', 'nume_oras': 'Nonexistent City', 'latitudine': 0.0, 'longitudine': 0.0}
+{'id_tara': '674b59602f5050db57fd075c', 'nume_oras': 'Cluj-Napoca Updated', 'latitudine': 47.0, 'longitudine': 24.0}

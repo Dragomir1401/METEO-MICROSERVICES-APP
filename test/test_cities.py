@@ -6,7 +6,6 @@ BASE_URL_CITIES = "http://localhost:5001/api/cities"
 
 class TestCitiesAPI(unittest.TestCase):
     def setUp(self):
-        """Clear the database before each test"""
         # Clear countries and cities
         clear_countries_response = requests.delete(f"{BASE_URL_COUNTRIES}/clear")
         self.assertEqual(clear_countries_response.status_code, 200, "Failed to clear countries")
@@ -20,62 +19,152 @@ class TestCitiesAPI(unittest.TestCase):
         self.assertEqual(response.status_code, 201, f"Failed to create base test country: {response.json()}")
         self.base_country_id = response.json()["id"]
 
+        # Add a base city for the base country
+        payload = {"id_tara": self.base_country_id, "nume_oras": "Cluj-Napoca", "latitudine": 46.7712, "longitudine": 23.6236}
+        response = requests.post(BASE_URL_CITIES, json=payload)
+        self.assertEqual(response.status_code, 201, f"Failed to create base test city: {response.json()}")
+        self.base_city_id = response.json()["id"]
+
+        # Add a secondary city for the base country
+        payload = {"id_tara": self.base_country_id, "nume_oras": "Brasov", "latitudine": 45.6579, "longitudine": 25.6012}
+        response = requests.post(BASE_URL_CITIES, json=payload)
+        self.assertEqual(response.status_code, 201, f"Failed to create secondary test city: {response.json()}")
+        self.secondary_city_id = response.json()["id"]
+
+    def tearDown(self):
+        # Separate test cases with a line
+        print("-------------------------------------------------")
+
     def test_post_city_success(self):
-        """Test adding a city (Success Case)"""
+        # Test adding a city (201 Success Case)
         payload = {"id_tara": self.base_country_id, "nume_oras": "Bucharest", "latitudine": 44.4268, "longitudine": 26.1025}
         response = requests.post(BASE_URL_CITIES, json=payload)
         self.assertEqual(response.status_code, 201, "Failed to add city (Success Case)")
         print(f"POST /cities SUCCESS: {response.json()}")
+        print("PASSED")
 
     def test_post_city_invalid_country(self):
-        """Test adding a city with an invalid country ID (Fail Case)"""
-        payload = {"id_tara": "000000000000000000000000", "nume_oras": "Invalid City", "latitudine": 0.0, "longitudine": 0.0}
+        # Test adding a city with an invalid country ID (400 Fail Case)
+        payload = {"id_tara": "123456789101112131415167", "nume_oras": "Invalid City", "latitudine": 0.0, "longitudine": 0.0}
         response = requests.post(BASE_URL_CITIES, json=payload)
         self.assertEqual(response.status_code, 404, "Invalid country ID not handled")
         print(f"POST /cities FAIL (Invalid Country): {response.json()}")
+        print("PASSED")
 
-    def test_get_cities(self):
-        """Test retrieving all cities"""
-        # Add a city
+    def test_post_city_missing_fields(self):
+        # Test adding a city with missing fields (400 Fail Case)
+        payload = {"id_tara": self.base_country_id, "nume_oras": "Missing Fields City"}
+        response = requests.post(BASE_URL_CITIES, json=payload)
+        self.assertEqual(response.status_code, 400, "Missing fields not handled")
+        print(f"POST /cities FAIL (Missing Fields): {response.json()}")
+        print("PASSED")
+
+    def test_post_city_duplicate(self):
+        # Test adding a duplicate city (409 Fail Case)
         payload = {"id_tara": self.base_country_id, "nume_oras": "Cluj-Napoca", "latitudine": 46.7712, "longitudine": 23.6236}
         requests.post(BASE_URL_CITIES, json=payload)
 
+        response = requests.post(BASE_URL_CITIES, json=payload)
+        self.assertEqual(response.status_code, 409, "Duplicate city not handled")
+        print(f"POST /cities FAIL (Duplicate): {response.json()}")
+        print("PASSED")
+
+    def test_post_city_bad_country_id(self):
+        # Test adding a city with a bad country ID (400 Fail Case)
+        payload = {"id_tara": "0000", "nume_oras": "Bad Country City", "latitudine": 0.0, "longitudine": 0.0}
+        response = requests.post(BASE_URL_CITIES, json=payload)
+        self.assertEqual(response.status_code, 400, "Bad country ID not handled")
+        print(f"POST /cities FAIL (Bad Country ID): {response.json()}")
+        print("PASSED")
+
+    def test_get_cities(self):
+        # Test retrieving all cities. Should be the 2 test cities
         response = requests.get(BASE_URL_CITIES)
         self.assertEqual(response.status_code, 200, "Failed to retrieve cities")
         print(f"GET /cities SUCCESS: {response.json()}")
+        print("PASSED")
 
-    def test_get_cities_by_country(self):
-        """Test retrieving cities by country"""
-        # Use the country created in setUp
-        country_id = self.base_country_id
+    def test_put_city_success(self):
+        # Test updating the base test city (200 Success Case)
+        update_payload = {"id_tara": self.base_country_id, "nume_oras": "Cluj-Napoca Updated", "latitudine": 47.0, "longitudine": 24.0}
+        response = requests.put(f"{BASE_URL_CITIES}/{self.base_city_id}", json=update_payload)
+        self.assertEqual(response.status_code, 200, "Failed to update base city")
+        print(f"PUT /cities/{self.base_city_id} SUCCESS: {response.json()}")
+        print("PASSED")
 
-        # Add a city to the existing country
-        city_payload = {"id_tara": country_id, "nume_oras": "Timisoara", "latitudine": 45.7489, "longitudine": 21.2087}
-        city_response = requests.post(BASE_URL_CITIES, json=city_payload)
-        self.assertEqual(city_response.status_code, 201, f"Failed to add city: {city_response.json()}")
+    def test_put_city_not_found(self):
+        # Test updating a non-existent city (404 Fail Case)
+        payload = {"id_tara": self.base_country_id, "nume_oras": "Nonexistent City", "latitudine": 0.0, "longitudine": 0.0}
+        response = requests.put(f"{BASE_URL_CITIES}/123456789101112131415167", json=payload)
+        self.assertEqual(response.status_code, 404, "Non-existent city not handled")
+        print(f"PUT /cities/123456789101112131415167 FAIL: {response.json()}")
+        print("PASSED")
 
-        # Test retrieval of cities by country
-        response = requests.get(f"{BASE_URL_CITIES}/country/{country_id}")
+    def test_put_city_country_not_found(self):
+        # Test updating a city with a non-existent country (404 Fail Case)
+        payload = {"id_tara": "123456789101112131415167", "nume_oras": "Nonexistent Country City", "latitudine": 0.0, "longitudine": 0.0}
+        response = requests.put(f"{BASE_URL_CITIES}/{self.base_city_id}", json=payload)
+        self.assertEqual(response.status_code, 404, "Non-existent country not handled")
+        print(f"PUT /cities/{self.base_city_id} FAIL (Non-existent Country): {response.json()}")
+        print("PASSED")
+
+    def test_put_city_missing_fields(self):
+        # Test updating a city with missing fields (400 Fail Case)
+        payload = {"id_tara": self.base_country_id, "nume_oras": "Missing Fields City"}
+        response = requests.put(f"{BASE_URL_CITIES}/{self.base_city_id}", json=payload)
+        self.assertEqual(response.status_code, 400, "Missing fields not handled")
+        print(f"PUT /cities/{self.base_city_id} FAIL (Missing Fields): {response.json()}")
+        print("PASSED")
+
+    def test_put_city_bad_id(self):
+        # Test updating a city with a bad ID (400 Fail Case)
+        payload = {"id_tara": self.base_country_id, "nume_oras": "Bad ID City", "latitudine": 0.0, "longitudine": 0.0}
+        response = requests.put(f"{BASE_URL_CITIES}/bad_id", json=payload)
+        self.assertEqual(response.status_code, 400, "Bad ID not handled")
+        print(f"PUT /cities/bad_id FAIL: {response.json()}")
+        print("PASSED")
+
+    def test_get_cities_by_country_success(self):
+        # Test retrieving cities by country. Should be the 2 test cities
+        response = requests.get(f"{BASE_URL_CITIES}/country/{self.base_country_id}")
         self.assertEqual(response.status_code, 200, "Failed to retrieve cities by country")
-        print(f"GET /cities/country/{country_id} SUCCESS: {response.json()}")
+        print(f"GET /cities/country/{self.base_country_id} SUCCESS: {response.json()}")
+        print("PASSED")
+
+    def test_get_cities_by_country_invalid_id(self):
+        # Test retrieving cities by an invalid country ID (400 Fail Case)
+        response = requests.get(f"{BASE_URL_CITIES}/country/0000")
+        self.assertEqual(response.status_code, 400, "Invalid country ID not handled")
+        print(f"GET /cities/country/0000 FAIL: {response.json()}")
+        print("PASSED")
+
+    def test_get_cities_by_country_not_found(self):
+        # Test retrieving cities by a non-existent country ID (404 Fail Case)
+        response = requests.get(f"{BASE_URL_CITIES}/country/123456789101112131415167")
+        self.assertEqual(response.status_code, 404, "Non-existent country not handled")
+        print(f"GET /cities/country/123456789101112131415167 FAIL: {response.json()}")
+        print("PASSED")
 
     def test_delete_city_success(self):
-        """Test deleting a city (Success Case)"""
-        # Add a city
-        payload = {"id_tara": self.base_country_id, "nume_oras": "Sibiu", "latitudine": 45.7983, "longitudine": 24.1256}
-        add_response = requests.post(BASE_URL_CITIES, json=payload)
-        city_id = add_response.json()["id"]
-
-        # Delete the city
-        response = requests.delete(f"{BASE_URL_CITIES}/{city_id}")
+        # Test deleting a city (200 Success Case)
+        response = requests.delete(f"{BASE_URL_CITIES}/{self.base_city_id}")
         self.assertEqual(response.status_code, 200, "Failed to delete city")
-        print(f"DELETE /cities/{city_id} SUCCESS: {response.json()}")
+        print(f"DELETE /cities/{self.base_city_id} SUCCESS: {response.json()}")
+        print("PASSED")
 
     def test_delete_city_not_found(self):
-        """Test deleting a non-existent city (Fail Case)"""
-        response = requests.delete(f"{BASE_URL_CITIES}/000000000000000000000000")
+        # Test deleting a non-existent city (404 Fail Case)
+        response = requests.delete(f"{BASE_URL_CITIES}/123456789101112131415167")
         self.assertEqual(response.status_code, 404, "Non-existent city not handled")
-        print(f"DELETE /cities/000000000000000000000000 FAIL: {response.json()}")
+        print(f"DELETE /cities/123456789101112131415167 FAIL: {response.json()}")
+        print("PASSED")
+
+    def test_delete_city_bad_id(self):
+        # Test deleting a city with a bad ID (400 Fail Case)
+        response = requests.delete(f"{BASE_URL_CITIES}/bad_id")
+        self.assertEqual(response.status_code, 400, "Bad ID not handled")
+        print(f"DELETE /cities/bad_id FAIL: {response.json()}")
+        print("PASSED")
 
 if __name__ == "__main__":
     unittest.main()
