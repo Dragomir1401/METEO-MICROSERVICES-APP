@@ -1,0 +1,76 @@
+GET /temperatures?lat=46.7712
+TEMPERATURES
+[
+  {
+    "id": "674ba35772f9454971c32b06",
+    "timestamp": "Sat, 30 Nov 2024 23:44:23 GMT",
+    "valoare": 22.5
+  },
+  {
+    "id": "674ba35772f9454971c32b07",
+    "timestamp": "Sat, 30 Nov 2024 23:44:23 GMT",
+    "valoare": 23.0
+  }
+]
+CITIES
+[
+  {
+    "id": "674ba35772f9454971c32b04",
+    "idTara": "674ba35772f9454971c32b03",
+    "lat": 46.7712,
+    "lon": 23.6236,
+    "nume": "Cluj-Napoca"
+  },
+  {
+    "id": "674ba35772f9454971c32b05",
+    "idTara": "674ba35772f9454971c32b03",
+    "lat": 45.6579,
+    "lon": 25.6012,
+    "nume": "Brasov"
+  }
+]
+COUNTRIES
+[
+  {
+    "id": "674ba35772f9454971c32b03",
+    "lat": 45.9432,
+    "lon": 24.9668,
+    "nume": "Romania"
+  }
+]
+[
+  {
+    "id": "674ba35772f9454971c32b06",
+    "timestamp": "Sat, 30 Nov 2024 23:44:23 GMT",
+    "valoare": 22.5
+  },
+  {
+    "id": "674ba35772f9454971c32b07",
+    "timestamp": "Sat, 30 Nov 2024 23:44:23 GMT",
+    "valoare": 23.0
+  }
+]
+[
+  {
+    "id": "674ba3b97202c395cb19fd34",
+    "timestamp": "Sat, 30 Nov 2024 23:46:01 GMT",
+    "valoare": 22.5
+  },
+  {
+    "id": "674ba3b97202c395cb19fd35",
+    "timestamp": "Sat, 30 Nov 2024 23:46:01 GMT",
+    "valoare": 23.0
+  }
+]
+[
+  {
+    "id": "674ba4e09c4d636dede23e89",
+    "timestamp": "Sat, 30 Nov 2024 23:50:56 GMT",
+    "valoare": 22.5
+  },
+  {
+    "id": "674ba4e09c4d636dede23e8a",
+    "timestamp": "Sat, 30 Nov 2024 23:50:56 GMT",
+    "valoare": 23.0
+  }
+]

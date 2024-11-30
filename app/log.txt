@@ -1,21 +1,16 @@
-{'id_tara': '123456789101112131415167', 'nume_oras': 'Nonexistent Country City', 'latitudine': 0.0, 'longitudine': 0.0}
-Country not found
-{'id_tara': '674b58eccabb41c2812ee1a2', 'nume_oras': 'Missing Fields City'}
-Missing required fields
-{'id_tara': '674b58eccabb41c2812ee1a5', 'nume_oras': 'Nonexistent City', 'latitudine': 0.0, 'longitudine': 0.0}
-{'id_tara': '674b58eccabb41c2812ee1a8', 'nume_oras': 'Cluj-Napoca Updated', 'latitudine': 47.0, 'longitudine': 24.0}
-Invalid city ID
-{'id_tara': '123456789101112131415167', 'nume_oras': 'Nonexistent Country City', 'latitudine': 0.0, 'longitudine': 0.0}
-Country not found
-{'id_tara': '674b59442f5050db57fd0730', 'nume_oras': 'Missing Fields City'}
-Missing required fields
-{'id_tara': '674b59442f5050db57fd0733', 'nume_oras': 'Nonexistent City', 'latitudine': 0.0, 'longitudine': 0.0}
-{'id_tara': '674b59452f5050db57fd0736', 'nume_oras': 'Cluj-Napoca Updated', 'latitudine': 47.0, 'longitudine': 24.0}
-Invalid city ID
-City ID: <Response [201]>
-{'id_tara': '123456789101112131415167', 'nume_oras': 'Nonexistent Country City', 'latitudine': 0.0, 'longitudine': 0.0}
-Country not found
-{'id_tara': '674b59602f5050db57fd0756', 'nume_oras': 'Missing Fields City'}
-Missing required fields
-{'id_tara': '674b59602f5050db57fd0759', 'nume_oras': 'Nonexistent City', 'latitudine': 0.0, 'longitudine': 0.0}
-{'id_tara': '674b59602f5050db57fd075c', 'nume_oras': 'Cluj-Napoca Updated', 'latitudine': 47.0, 'longitudine': 24.0}
+{}
+Query result: {'_id': ObjectId('674ba35772f9454971c32b04'), 'id_tara': '674ba35772f9454971c32b03', 'nume_oras': 'Cluj-Napoca', 'latitudine': 46.7712, 'longitudine': 23.6236}
+{'id_oras': '674ba35772f9454971c32b04'}
+Query result: [{'_id': ObjectId('674ba35772f9454971c32b06'), 'valoare': 22.5, 'timestamp': datetime.datetime(2024, 11, 30, 23, 44, 23, 964000)}, {'_id': ObjectId('674ba35772f9454971c32b07'), 'valoare': 23.0, 'timestamp': datetime.datetime(2024, 11, 30, 23, 44, 23, 971000)}]
+{'latitudine': 46.7712}
+Query result: {'_id': ObjectId('674ba35772f9454971c32b04'), 'id_tara': '674ba35772f9454971c32b03', 'nume_oras': 'Cluj-Napoca', 'latitudine': 46.7712, 'longitudine': 23.6236}
+{'id_oras': '674ba35772f9454971c32b04'}
+Query result: [{'_id': ObjectId('674ba35772f9454971c32b06'), 'valoare': 22.5, 'timestamp': datetime.datetime(2024, 11, 30, 23, 44, 23, 964000)}, {'_id': ObjectId('674ba35772f9454971c32b07'), 'valoare': 23.0, 'timestamp': datetime.datetime(2024, 11, 30, 23, 44, 23, 971000)}]
+{'latitudine': 46.7712}
+Query result: {'_id': ObjectId('674ba3b97202c395cb19fd32'), 'id_tara': '674ba3b97202c395cb19fd31', 'nume_oras': 'Cluj-Napoca', 'latitudine': 46.7712, 'longitudine': 23.6236}
+{'id_oras': '674ba3b97202c395cb19fd32'}
+Query result: [{'_id': ObjectId('674ba3b97202c395cb19fd34'), 'valoare': 22.5, 'timestamp': datetime.datetime(2024, 11, 30, 23, 46, 1, 548000)}, {'_id': ObjectId('674ba3b97202c395cb19fd35'), 'valoare': 23.0, 'timestamp': datetime.datetime(2024, 11, 30, 23, 46, 1, 555000)}]
+{'longitudine': 25.6012}
+Query result: {'_id': ObjectId('674ba3b97202c395cb19fd3a'), 'id_tara': '674ba3b97202c395cb19fd38', 'nume_oras': 'Brasov', 'latitudine': 45.6579, 'longitudine': 25.6012}
+{'id_oras': '674ba3b97202c395cb19fd3a'}
+Query result: [{'_id': ObjectId('674ba3b97202c395cb19fd3d'), 'valoare': 24.0, 'timestamp': datetime.datetime(2024, 11, 30, 23, 46, 1, 658000)}, {'_id': ObjectId('674ba3b97202c395cb19fd3e'), 'valoare': 25.0, 'timestamp': datetime.datetime(2024, 11, 30, 23, 46, 1, 665000)}]
