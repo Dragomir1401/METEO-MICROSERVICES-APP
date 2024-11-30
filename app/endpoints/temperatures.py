@@ -3,16 +3,16 @@ from bson.objectid import ObjectId
 from datetime import datetime
 from models import temperaturi, orase, tari
 
-temperatures_bp = Blueprint('temperatures', __name__)
+tmp_bp = Blueprint('temperatures', __name__)
 
-@temperatures_bp.route('/api/temperatures/clear', methods=['DELETE'])
+@tmp_bp.route('/api/temperatures/clear', methods=['DELETE'])
 def clear_temperatures():
     """Clear all temperatures from the database"""
     temperaturi.delete_many({})
     return jsonify({"message": "All temperatures cleared"}), 200
 
 
-@temperatures_bp.route('/api/temperatures', methods=['POST'])
+@tmp_bp.route('/api/temperatures', methods=['POST'])
 def add_temperature():
     data = request.json
     if not data or "id_oras" not in data or "valoare" not in data:
@@ -26,7 +26,7 @@ def add_temperature():
     return jsonify({"id": str(result.inserted_id)}), 201
 
 
-@temperatures_bp.route('/api/temperatures', methods=['GET'])
+@tmp_bp.route('/api/temperatures', methods=['GET'])
 def get_temperatures():
     lat = request.args.get("lat")
     lon = request.args.get("lon")
@@ -51,7 +51,7 @@ def get_temperatures():
     return jsonify(temps), 200
 
 
-@temperatures_bp.route('/api/temperatures/cities/<id_oras>', methods=['GET'])
+@tmp_bp.route('/api/temperatures/cities/<id_oras>', methods=['GET'])
 def get_city_temperatures(id_oras):
     from_date = request.args.get("from")
     until_date = request.args.get("until")
