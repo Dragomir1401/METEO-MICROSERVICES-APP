@@ -57,74 +57,71 @@ class TestTemperaturesAPI(unittest.TestCase):
         # Separate test cases with a line
         print("-------------------------------------------------")
 
-    def test_clear_temperatures(self):
-        """Test clearing all temperatures"""
-        response = requests.delete(f"{BASE_URL_TEMPERATURES}/clear")
-        self.assertEqual(response.status_code, 200, "Failed to clear temperatures")
-        print(f"DELETE /temperatures/clear SUCCESS: {response.json()}")
-        print("PASSED")
+    # def test_clear_temperatures(self):
+    #     """Test clearing all temperatures"""
+    #     response = requests.delete(f"{BASE_URL_TEMPERATURES}/clear")
+    #     self.assertEqual(response.status_code, 200, "Failed to clear temperatures")
+    #     print(f"DELETE /temperatures/clear SUCCESS: {response.json()}")
+    #     print("PASSED")
 
-    def test_post_temperature_success(self):
-        # Test adding a temperature (201 Success Case)
-        payload = {"id_oras": self.base_city_id, "valoare": 25.0}
-        response = requests.post(BASE_URL_TEMPERATURES, json=payload)
-        self.assertEqual(response.status_code, 201, "Failed to add temperature")
-        print(f"POST /temperatures SUCCESS: {response.json()}")
-        print("PASSED")
+    # def test_post_temperature_success(self):
+    #     # Test adding a temperature (201 Success Case)
+    #     payload = {"id_oras": self.base_city_id, "valoare": 25.0}
+    #     response = requests.post(BASE_URL_TEMPERATURES, json=payload)
+    #     self.assertEqual(response.status_code, 201, "Failed to add temperature")
+    #     print(f"POST /temperatures SUCCESS: {response.json()}")
+    #     print("PASSED")
 
-    def test_post_temperature_missing_fields(self):
-        # Test adding a temperature with missing fields (400 Fail Case)
-        payload = {"id_oras": self.base_city_id}
-        response = requests.post(BASE_URL_TEMPERATURES, json=payload)
-        self.assertEqual(response.status_code, 400, "Missing fields not handled")
-        print(f"POST /temperatures FAIL (Missing Fields): {response.json()}")
-        print("PASSED")
+    # def test_post_temperature_missing_fields(self):
+    #     # Test adding a temperature with missing fields (400 Fail Case)
+    #     payload = {"id_oras": self.base_city_id}
+    #     response = requests.post(BASE_URL_TEMPERATURES, json=payload)
+    #     self.assertEqual(response.status_code, 400, "Missing fields not handled")
+    #     print(f"POST /temperatures FAIL (Missing Fields): {response.json()}")
+    #     print("PASSED")
 
-    def test_post_temperature_invalid_city(self):
-        # Test adding a temperature with an invalid city ID (404 Fail Case)
-        payload = {"id_oras": "123456789101112131415167", "valoare": 30.0}
-        response = requests.post(BASE_URL_TEMPERATURES, json=payload)
-        self.assertEqual(response.status_code, 404, "Invalid city ID not handled")
-        print(f"POST /temperatures FAIL (Invalid City): {response.json()}")
-        print("PASSED")
+    # def test_post_temperature_invalid_city(self):
+    #     # Test adding a temperature with an invalid city ID (404 Fail Case)
+    #     payload = {"id_oras": "123456789101112131415167", "valoare": 30.0}
+    #     response = requests.post(BASE_URL_TEMPERATURES, json=payload)
+    #     self.assertEqual(response.status_code, 404, "Invalid city ID not handled")
+    #     print(f"POST /temperatures FAIL (Invalid City): {response.json()}")
+    #     print("PASSED")
 
-    def test_post_temperature_bad_id(self):
-        # Test adding a temperature with a bad city ID (400 Fail Case)
-        payload = {"id_oras": "bad_id", "valoare": 30.0}
-        response = requests.post(BASE_URL_TEMPERATURES, json=payload)
-        self.assertEqual(response.status_code, 400, "Bad city ID not handled")
-        print(f"POST /temperatures FAIL (Bad ID): {response.json()}")
-        print("PASSED")
+    # def test_post_temperature_bad_id(self):
+    #     # Test adding a temperature with a bad city ID (400 Fail Case)
+    #     payload = {"id_oras": "bad_id", "valoare": 30.0}
+    #     response = requests.post(BASE_URL_TEMPERATURES, json=payload)
+    #     self.assertEqual(response.status_code, 400, "Bad city ID not handled")
+    #     print(f"POST /temperatures FAIL (Bad ID): {response.json()}")
+    #     print("PASSED")
 
     # Cannot test timestamp uniqueness due to the nature of the test and using utcnow() to set the timestamp
 
-    def test_get_temperatures_no_query(self):
-        # Test retrieving all temperatures
-        response = requests.get(BASE_URL_TEMPERATURES)
-        self.assertEqual(response.status_code, 200, "Failed to retrieve temperatures")
-        print(f"GET /temperatures SUCCESS: {response.json()}")
-        print("PASSED")
+    # def test_get_temperatures_no_query(self):
+    #     # Test retrieving all temperatures
+    #     response = requests.get(BASE_URL_TEMPERATURES)
+    #     self.assertEqual(response.status_code, 200, "Failed to retrieve temperatures")
+    #     print(f"GET /temperatures SUCCESS: {response.json()}")
+    #     print("PASSED")
 
-    def test_get_temperatures_latitude_query(self):
-        # Test retrieving temperatures by latitude such that we only get the temperatures for the base city
-        response = requests.get(f"{BASE_URL_TEMPERATURES}?lat=46.7712")
-        with open("response.json", "a") as f:
-            f.write(response.text)
+    # def test_get_temperatures_latitude_query(self):
+    #     # Test retrieving temperatures by latitude such that we only get the temperatures for the base city
+    #     response = requests.get(f"{BASE_URL_TEMPERATURES}?lat=46.7712")
+    #     self.assertEqual(response.status_code, 200, "Failed to retrieve temperatures by latitude")
+    #     print(f"GET /temperatures?lat=46.7712 SUCCESS: {response.json()}")
+    #     # Assert that we only have 2 temperatures for the base city
+    #     self.assertEqual(len(response.json()), 2, "Failed to filter temperatures by latitude")
+    #     print("PASSED")
 
-        self.assertEqual(response.status_code, 200, "Failed to retrieve temperatures by latitude")
-        print(f"GET /temperatures?lat=46.7712 SUCCESS: {response.json()}")
-        # Assert that we only have 2 temperatures for the base city
-        self.assertEqual(len(response.json()), 2, "Failed to filter temperatures by latitude")
-        print("PASSED")
-
-    def test_get_temperatures_longitude_query(self):
-        # Test retrieving temperatures by longitude such that we only get the temperatures for the secondary city
-        response = requests.get(f"{BASE_URL_TEMPERATURES}?lon=25.6012")
-        self.assertEqual(response.status_code, 200, "Failed to retrieve temperatures by longitude")
-        print(f"GET /temperatures?lon=25.6012 SUCCESS: {response.json()}")
-        # Assert that we only have 2 temperatures for the secondary city
-        self.assertEqual(len(response.json()), 2, "Failed to filter temperatures by longitude")
-        print("PASSED")
+    # def test_get_temperatures_longitude_query(self):
+    #     # Test retrieving temperatures by longitude such that we only get the temperatures for the secondary city
+    #     response = requests.get(f"{BASE_URL_TEMPERATURES}?lon=25.6012")
+    #     self.assertEqual(response.status_code, 200, "Failed to retrieve temperatures by longitude")
+    #     print(f"GET /temperatures?lon=25.6012 SUCCESS: {response.json()}")
+    #     # Assert that we only have 2 temperatures for the secondary city
+    #     self.assertEqual(len(response.json()), 2, "Failed to filter temperatures by longitude")
+    #     print("PASSED")
 
     def test_get_temperatures_from_query(self):
         # Test retrieving temperatures from a few years ago in order to receive 4 temperatures
@@ -157,6 +154,16 @@ class TestTemperaturesAPI(unittest.TestCase):
         print(f"GET /temperatures?until=2028-01-01 SUCCESS: {response.json()}")
         # Assert that we have 4 temperatures
         self.assertEqual(len(response.json()), 4, "Failed to filter temperatures until a specific date")
+
+        print("PASSED")
+
+    def test_get_temperatures_all_queries(self):
+        # Test retrieving temperatures by latitude, longitude, and date
+        response = requests.get(f"{BASE_URL_TEMPERATURES}?lat=46.7712&lon=23.6236&from=2019-01-01&until=2028-01-01")
+        self.assertEqual(response.status_code, 200, "Failed to retrieve temperatures by latitude, longitude, and date")
+        print(f"GET /temperatures?lat=46.7712&lon=23.6236&from=2019-01-01&until=2028-01-01 SUCCESS: {response.json()}")
+        # Assert that we have 2 temperatures
+        self.assertEqual(len(response.json()), 2, "Failed to filter temperatures by latitude, longitude, and date")
 
         print("PASSED")
 

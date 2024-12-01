@@ -62,6 +62,36 @@ def add_temperature():
     # Return the ID of the newly inserted temperature
     return jsonify({"id": str(result.inserted_id)}), 201
 
+def construct_date_qurery(from_date, until_date, temp_query):
+    # Construct the timestamp query
+    if from_date or until_date:
+        temp_query["timestamp"] = {}
+        if from_date:
+            try:
+                temp_query["timestamp"]["$gte"] = datetime.fromisoformat(from_date)
+            except ValueError:
+                return -1
+        if until_date:
+            try:
+                temp_query["timestamp"]["$lte"] = datetime.fromisoformat(until_date)
+            except ValueError:
+                return -1
+
+    return temp_query
+
+def format_temperature_response(temperatures):
+    # Format the response
+    response = [
+        {
+            "id": str(temp["_id"]),
+            "valoare": temp["valoare"],
+            "timestamp": temp["timestamp"].isoformat()
+        }
+        for temp in temperatures
+    ]
+
+    return jsonify(response), 200
+
 @tmp_bp.route('/api/temperatures', methods=['GET'])
 def get_temperatures():
     lat = request.args.get("lat")
@@ -70,71 +100,87 @@ def get_temperatures():
     until_date = request.args.get("until")
 
     # Check if no query parameters are provided
-    if not lat and not lon:
+    if not lat and not lon and not from_date and not until_date:
         temperatures = list(temperaturi.find({}, {"_id": 1, "valoare": 1, "timestamp": 1}))
         for temp in temperatures:
             temp["id"] = str(temp.pop("_id"))
-        return jsonify(temperatures), 200
+        return jsonify(temperatures), 200   
+    
+    city_id = None
+    if lat or lon:
+        # Find the city based on latitude and/or longitude
+        city_query = {}
+        if lat:
+            city_query["latitudine"] = float(lat)
+        if lon:
+            city_query["longitudine"] = float(lon)
 
-    # Find the city based on latitude and/or longitude
-    city_query = {}
-    if lat:
-        city_query["latitudine"] = float(lat)
-    if lon:
-        city_query["longitudine"] = float(lon)
+        # Run the query
+        city = orase.find_one(city_query)
 
-    # Run the query
-    city = orase.find_one(city_query)
+        # Check if the city was found
+        if not city:
+            with open("log.txt", "a") as f:
+                f.write(f"city_query: {city_query}\n")
+            return jsonify({"error": "City not found"}), 404
 
-    # Check if the city was found
-    if not city:
-        return jsonify({"error": "City not found"}), 404
-
-    # Extract the city ID from ObjectId
-    city_id = str(city["_id"])
+        # Extract the city ID from ObjectId
+        city_id = str(city["_id"])
 
     # Find temperatures for the city
-    temp_query = {"id_oras": city_id}
-    if from_date or until_date:
-        temp_query["timestamp"] = {}
-        if from_date:
-            temp_query["timestamp"]["$gte"] = datetime.fromisoformat(from_date)
-        if until_date:
-            temp_query["timestamp"]["$lte"] = datetime.fromisoformat(until_date)
+    if city_id is None:
+        temp_query = {}
+    else:
+        temp_query = {"id_oras": city_id}
+
+    # Construct the timestamp query
+    temp_query = construct_date_qurery(from_date, until_date, temp_query)
+
+    # Check if construct timestamp query failed
+    if temp_query == -1:
+        return jsonify({"error": "Invalid date format"}), 400
 
     temperatures = list(temperaturi.find(temp_query, {"_id": 1, "valoare": 1, "timestamp": 1}))
 
     # Check if no temperatures were found
     if not temperatures:
-        return jsonify({"error": "No matching temperatures found"}), 404
+        # Return empty list
+        return jsonify([]), 200
 
     # Format the response
-    response = [
-        {
-            "id": str(temp["_id"]),
-            "valoare": temp["valoare"],
-            "timestamp": temp["timestamp"]
-        }
-        for temp in temperatures
-    ]
-
-    return jsonify(response), 200
-  
+    return format_temperature_response(temperatures)
 
 @tmp_bp.route('/api/temperatures/cities/<id_oras>', methods=['GET'])
 def get_city_temperatures(id_oras):
+    # Check if the id is valid
+    if not is_valid_id(id_oras):
+        return jsonify({"error": "Invalid city ID"}), 400
+
+    # Check if the city exists
+    city = find_entity_by_id(id_oras, "city")
+    if not city:
+        return jsonify({"error": "City not found"}), 404
+
+    # Parse the query parameters for date filtering
     from_date = request.args.get("from")
     until_date = request.args.get("until")
 
-    query = {"id_oras": id_oras}
-    if from_date or until_date:
-        query["timestamp"] = {}
-        if from_date:
-            query["timestamp"]["$gte"] = datetime.fromisoformat(from_date)
-        if until_date:
-            query["timestamp"]["$lte"] = datetime.fromisoformat(until_date)
+    # Construct the query
+    temp_query = {"id_oras": id_oras}
+    temp_query = construct_date_qurery()
 
-    temps = list(temperaturi.find(query, {"_id": 1, "valoare": 1, "timestamp": 1}))
-    for temp in temps:
-        temp["id"] = str(temp.pop("_id"))
-    return jsonify(temps), 200
+    if temp_query == -1:
+        return jsonify({"error": "Invalid date format"}), 400
+
+    # Find the temperatures for the city
+    temperatures = list(temperaturi.find(temp_query, {"_id": 1, "valoare": 1, "timestamp": 1}))
+
+    # Check if no temperatures were found
+    if not temperatures:
+        # Return empty list
+        return jsonify([]), 200
+
+    # Format the response
+    return format_temperature_response(temperatures)
+
+        
