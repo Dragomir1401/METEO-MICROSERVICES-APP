@@ -157,6 +157,22 @@ class TestTemperaturesAPI(unittest.TestCase):
 
         print("PASSED")
 
+    def test_get_temperatures_bad_date_format(self):
+        # Test retrieving temperatures with a bad date format
+        response = requests.get(f"{BASE_URL_TEMPERATURES}?from=02-01-2019")
+        self.assertEqual(response.status_code, 400, "Failed to handle bad date format")
+        print(f"GET /temperatures?from=2019-01-01T00:00:00 FAIL: {response.json()}")
+
+        response = requests.get(f"{BASE_URL_TEMPERATURES}?until=01-01-2019")
+        self.assertEqual(response.status_code, 400, "Failed to handle bad date format")
+        print(f"GET /temperatures?until=2019-01-01T00:00:00 FAIL: {response.json()}")
+
+        respones = requests.get(f"{BASE_URL_TEMPERATURES}?from=02-01-2019&until=01-01-2019")
+        self.assertEqual(response.status_code, 400, "Failed to handle bad date format")
+        print(f"GET /temperatures?from=2019-01-01T00:00:00&until=2019-01-01T00:00:00 FAIL: {response.json()}")
+
+        print("PASSED")
+
     def test_get_temperatures_all_queries(self):
         # Test retrieving temperatures by latitude, longitude, and date
         response = requests.get(f"{BASE_URL_TEMPERATURES}?lat=46.7712&lon=23.6236&from=2019-01-01&until=2028-01-01")
@@ -167,6 +183,175 @@ class TestTemperaturesAPI(unittest.TestCase):
 
         print("PASSED")
 
+    def test_get_temperatures_cities_bad_id(self):
+        # Test retrieving temperatures for a city with a bad ID
+        response = requests.get(f"{BASE_URL_TEMPERATURES}/cities/bad_id")
+        self.assertEqual(response.status_code, 400, "Failed to handle bad city ID")
+        print(f"GET /temperatures/cities/bad_id FAIL: {response.json()}")
+        print("PASSED")
+
+    def test_get_temperatures_cities_invalid_city(self):
+        # Test retrieving temperatures for an invalid city ID
+        response = requests.get(f"{BASE_URL_TEMPERATURES}/cities/123456789101112131415167")
+        self.assertEqual(response.status_code, 404, "Failed to handle invalid city ID")
+        print(f"GET /temperatures/cities/123456789101112131415167 FAIL: {response.json()}")
+        print("PASSED")
+
+    def test_get_temperatures_cities_invalid_date_format(self):
+        # Test retrieving temperatures for a city with an invalid date format
+        response = requests.get(f"{BASE_URL_TEMPERATURES}/cities/{self.base_city_id}?from=02-01-2019")
+        self.assertEqual(response.status_code, 400, "Failed to handle invalid date format")
+        print(f"GET /temperatures/cities/{self.base_city_id}?from=2019-01-01T00:00:00 FAIL: {response.json()}")
+
+        response = requests.get(f"{BASE_URL_TEMPERATURES}/cities/{self.base_city_id}?until=01-01-2019")
+        self.assertEqual(response.status_code, 400, "Failed to handle invalid date format")
+        print(f"GET /temperatures/cities/{self.base_city_id}?until=2019-01-01T00:00:00 FAIL: {response.json()}")
+
+        response = requests.get(f"{BASE_URL_TEMPERATURES}/cities/{self.base_city_id}?from=02-01-2019&until=01-01-2019")
+        self.assertEqual(response.status_code, 400, "Failed to handle invalid date format")
+        print(f"GET /temperatures/cities/{self.base_city_id}?from=2019-01-01T00:00:00&until=2019-01-01T00:00:00 FAIL: {response.json()}")
+
+        print("PASSED")
+
+    def test_get_temperatures_cities_from_query(self):
+        # Test retrieving temperatures for a city from a specific date
+        response = requests.get(f"{BASE_URL_TEMPERATURES}/cities/{self.base_city_id}?from=2019-01-01")
+        self.assertEqual(response.status_code, 200, "Failed to retrieve temperatures for a city from a specific date")
+        print(f"GET /temperatures/cities/{self.base_city_id}?from=2019-01-01 SUCCESS: {response.json()}")
+        # Assert that we have 2 temperatures
+        self.assertEqual(len(response.json()), 2, "Failed to filter temperatures for a city from a specific date")
+        print("PASSED")
+
+    def test_get_temperatures_cities_until_query(self):
+        # Test retrieving temperatures for a city until a specific date
+        response = requests.get(f"{BASE_URL_TEMPERATURES}/cities/{self.base_city_id}?until=2028-01-01")
+        self.assertEqual(response.status_code, 200, "Failed to retrieve temperatures for a city until a specific date")
+        print(f"GET /temperatures/cities/{self.base_city_id}?until=2028-01-01 SUCCESS: {response.json()}")
+        # Assert that we have 2 temperatures
+        self.assertEqual(len(response.json()), 2, "Failed to filter temperatures for a city until a specific date")
+        print("PASSED")
+
+    def test_get_temperatures_cities_all_queries(self):
+        # Test retrieving temperatures for a city by date
+        response = requests.get(f"{BASE_URL_TEMPERATURES}/cities/{self.base_city_id}?from=2019-01-01&until=2028-01-01")
+        self.assertEqual(response.status_code, 200, "Failed to retrieve temperatures for a city by date")
+        print(f"GET /temperatures/cities/{self.base_city_id}?from=2019-01-01&until=2028-01-01 SUCCESS: {response.json()}")
+        # Assert that we have 2 temperatures
+        self.assertEqual(len(response.json()), 2, "Failed to filter temperatures for a city by date")
+        print("PASSED")
+
+    def test_get_temperatures_countries_bad_id(self):
+        # Test retrieving temperatures for a country with a bad ID
+        response = requests.get(f"{BASE_URL_TEMPERATURES}/countries/bad_id")
+        self.assertEqual(response.status_code, 400, "Failed to handle bad country ID")
+        print(f"GET /temperatures/countries/bad_id FAIL: {response.json()}")
+        print("PASSED")
+
+    def test_get_temperatures_countries_invalid_country(self):
+        # Test retrieving temperatures for an invalid country ID
+        response = requests.get(f"{BASE_URL_TEMPERATURES}/countries/123456789101112131415167")
+        self.assertEqual(response.status_code, 404, "Failed to handle invalid country ID")
+        print(f"GET /temperatures/countries/123456789101112131415167 FAIL: {response.json()}")
+        print("PASSED")
+
+    def test_get_temperatures_countries_invalid_date_format(self):
+        # Test retrieving temperatures for a country with an invalid date format
+        response = requests.get(f"{BASE_URL_TEMPERATURES}/countries/{self.base_country_id}?from=02-01-2019")
+        self.assertEqual(response.status_code, 400, "Failed to handle invalid date format")
+        print(f"GET /temperatures/countries/{self.base_country_id}?from=2019-01-01T00:00:00 FAIL: {response.json()}")
+
+        response = requests.get(f"{BASE_URL_TEMPERATURES}/countries/{self.base_country_id}?until=01-01-2019")
+        self.assertEqual(response.status_code, 400, "Failed to handle invalid date format")
+        print(f"GET /temperatures/countries/{self.base_country_id}?until=2019-01-01T00:00:00 FAIL: {response.json()}")
+
+        response = requests.get(f"{BASE_URL_TEMPERATURES}/countries/{self.base_country_id}?from=02-01-2019&until=01-01-2019")
+        self.assertEqual(response.status_code, 400, "Failed to handle invalid date format")
+        print(f"GET /temperatures/countries/{self.base_country_id}?from=2019-01-01T00:00:00&until=2019-01-01T00:00:00 FAIL: {response.json()}")
+
+        print("PASSED")
+
+    def test_get_temperatures_countries_from_query(self):
+        # Test retrieving temperatures for a country from a specific date
+        response = requests.get(f"{BASE_URL_TEMPERATURES}/countries/{self.base_country_id}?from=2019-01-01")
+        self.assertEqual(response.status_code, 200, "Failed to retrieve temperatures for a country from a specific date")
+        print(f"GET /temperatures/countries/{self.base_country_id}?from=2019-01-01 SUCCESS: {response.json()}")
+        # Assert that we have 4 temperatures
+        self.assertEqual(len(response.json()), 4, "Failed to filter temperatures for a country from a specific date")
+        print("PASSED")
+
+    def test_get_temperatures_countries_until_query(self):
+        # Test retrieving temperatures for a country until a specific date
+        response = requests.get(f"{BASE_URL_TEMPERATURES}/countries/{self.base_country_id}?until=2028-01-01")
+        self.assertEqual(response.status_code, 200, "Failed to retrieve temperatures for a country until a specific date")
+        print(f"GET /temperatures/countries/{self.base_country_id}?until=2028-01-01 SUCCESS: {response.json()}")
+        # Assert that we have 4 temperatures
+        self.assertEqual(len(response.json()), 4, "Failed to filter temperatures for a country until a specific date")
+        print("PASSED")
+
+    def test_get_temperatures_countries_all_queries(self):
+        # Test retrieving temperatures for a country by date
+        response = requests.get(f"{BASE_URL_TEMPERATURES}/countries/{self.base_country_id}?from=2019-01-01&until=2028-01-01")
+        self.assertEqual(response.status_code, 200, "Failed to retrieve temperatures for a country by date")
+        print(f"GET /temperatures/countries/{self.base_country_id}?from=2019-01-01&until=2028-01-01 SUCCESS: {response.json()}")
+        # Assert that we have 4 temperatures
+        self.assertEqual(len(response.json()), 4, "Failed to filter temperatures for a country by date")
+        print("PASSED")
+
+    def test_put_temperature_success(self):
+        # Test updating a temperature (200 Success Case)
+        # Add a temperature
+        temp_payload = {"id_oras": self.base_city_id, "valoare": 20.0}
+        temp_response = requests.post(BASE_URL_TEMPERATURES, json=temp_payload)
+        self.assertEqual(temp_response.status_code, 201, f"Failed to add temperature: {temp_response.text}")
+        temp_id = temp_response.json()["id"]
+
+        # Update the temperature
+        update_payload = {"id_oras": self.base_city_id, "valoare": 25.0}
+        response = requests.put(f"{BASE_URL_TEMPERATURES}/{temp_id}", json=update_payload)
+        self.assertEqual(response.status_code, 200, "Failed to update temperature")
+
+        # Check that the temperature was updated by querying for that city's temperatures
+        response = requests.get(f"{BASE_URL_TEMPERATURES}/cities/{self.base_city_id}")
+        self.assertEqual(response.status_code, 200, "Failed to retrieve temperatures for a city")
+        # Assert that the response contains a temperature with the updated value
+        self.assertTrue(any(temp["valoare"] == 25.0 for temp in response.json()), "Failed to update temperature")
+
+        print(f"PUT /temperatures/{temp_id} SUCCESS: {response.json()}")
+        print("PASSED")
+
+    def test_put_temperature_missing_fields(self):
+        # Test updating a temperature with missing fields (400 Fail Case)
+        # Add a temperature
+        temp_payload = {"id_oras": self.base_city_id, "valoare": 20.0}
+        temp_response = requests.post(BASE_URL_TEMPERATURES, json=temp_payload)
+        self.assertEqual(temp_response.status_code, 201, f"Failed to add temperature: {temp_response.text}")
+        temp_id = temp_response.json()["id"]
+
+        # Update the temperature with missing fields
+        update_payload = {"id_oras": self.base_city_id}
+        response = requests.put(f"{BASE_URL_TEMPERATURES}/{temp_id}", json=update_payload)
+        self.assertEqual(response.status_code, 400, "Failed to handle missing fields")
+        print(f"PUT /temperatures/{temp_id} FAIL (Missing Fields): {response.json()}")
+        print("PASSED")
+
+
+    def test_put_temperature_invalid_temperature_id(self):
+        # Test updating a non-existent temperature (404 Fail Case)
+        payload = {"id_oras": self.base_city_id, "valoare": 25.0}
+        response = requests.put(f"{BASE_URL_TEMPERATURES}/123456789101112131415167", json=payload)
+        self.assertEqual(response.status_code, 404, "Failed to handle non-existent temperature")
+        print(f"PUT /temperatures/123456789101112131415167 FAIL: {response.json()}")
+        print("PASSED")
+
+    def test_put_temperatures_temperature_not_found(self):
+        # Test updating a temperature with a non-existent city ID (404 Fail Case)
+        payload = {"id_oras": "123456789101112131415167", "valoare": 25.0}
+        response = requests.put(f"{BASE_URL_TEMPERATURES}/123456789101112131415167", json=payload)
+        self.assertEqual(response.status_code, 404, "Failed to handle non-existent city")
+        print(f"PUT /temperatures/123456789101112131415167 FAIL: {response.json()}")
+        print("PASSED")
+
+    
 
 #     def test_post_temperature_invalid_city(self):
 #         """Test adding a temperature with an invalid city ID (Fail Case)"""

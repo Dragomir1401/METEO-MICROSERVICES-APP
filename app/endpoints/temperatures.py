@@ -167,7 +167,7 @@ def get_city_temperatures(id_oras):
 
     # Construct the query
     temp_query = {"id_oras": id_oras}
-    temp_query = construct_date_qurery()
+    temp_query = construct_date_qurery(from_date, until_date, temp_query)
 
     if temp_query == -1:
         return jsonify({"error": "Invalid date format"}), 400
@@ -182,5 +182,68 @@ def get_city_temperatures(id_oras):
 
     # Format the response
     return format_temperature_response(temperatures)
+
+@tmp_bp.route('/api/temperatures/countries/<id_tara>', methods=['GET'])
+def get_country_temperatures(id_tara):
+    # Check if the id is valid
+    if not is_valid_id(id_tara):
+        return jsonify({"error": "Invalid country ID"}), 400
+
+    # Check if the country exists
+    country = find_entity_by_id(id_tara, "country")
+    if not country:
+        return jsonify({"error": "Country not found"}), 404
+
+    # Parse the query parameters for date filtering
+    from_date = request.args.get("from")
+    until_date = request.args.get("until")
+
+    # Find the cities for the country
+    cities = list(orase.find({"id_tara": id_tara}, {"_id": 1}))
+
+    # Construct the query
+    temp_query = {"id_oras": {"$in": [str(city["_id"]) for city in cities]}}
+    temp_query = construct_date_qurery(from_date, until_date, temp_query)
+
+    if temp_query == -1:
+        return jsonify({"error": "Invalid date format"}), 400
+
+    # Find the temperatures for the country
+    temperatures = list(temperaturi.find(temp_query, {"_id": 1, "valoare": 1, "timestamp": 1}))
+
+    # Check if no temperatures were found
+    if not temperatures:
+        # Return empty list
+        return jsonify([]), 200
+
+    # Format the response
+    return format_temperature_response(temperatures)
+
+@tmp_bp.route('/api/temperatures/<id>', methods=['PUT'])
+def update_temperature(id):
+    # Get the JSON data from the request
+    data = request.json
+
+    # Check if the required fields are present in the data
+    if not contains_all_fields(data):
+        return jsonify({"error": "Missing required fields"}), 400
+
+    # Check if the id is valid
+    if not is_valid_id(id):
+        return jsonify({"error": "Invalid temperature ID"}), 400
+
+    # Check if the temperature exists
+    if not temperaturi.find_one({"_id": ObjectId(id)}):
+        return jsonify({"error": "Temperature not found"}), 404
+
+    # Update the temperature with the specified ID
+    result = temperaturi.update_one({"_id": ObjectId(id)}, {"$set": data})
+
+    # Translate the id_oras field to idOras
+    data["idOras"] = data.pop("id_oras")
+
+    # Return a success message
+    return jsonify({"message": "Temperature updated"}), 200
+
 
         
