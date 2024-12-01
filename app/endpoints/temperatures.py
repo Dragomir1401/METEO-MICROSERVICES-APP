@@ -245,5 +245,21 @@ def update_temperature(id):
     # Return a success message
     return jsonify({"message": "Temperature updated"}), 200
 
+@tmp_bp.route('/api/temperatures/<id>', methods=['DELETE'])
+def delete_temperature(id):
+    # Check if the id is valid
+    if not is_valid_id(id):
+        return jsonify({"error": "Invalid temperature ID"}), 400
+
+    # Delete the temperature with the specified ID
+    result = temperaturi.delete_one({"_id": ObjectId(id)})
+
+    # Check if the temperature was found and deleted
+    if result.deleted_count == 0:
+        return jsonify({"error": "Temperature not found"}), 404
+
+    # Return a success message if the temperature was deleted
+    return jsonify({"message": "Temperature deleted"}), 200
+
 
         
