@@ -166,5 +166,25 @@ class TestCitiesAPI(unittest.TestCase):
         print(f"DELETE /cities/bad_id FAIL: {response.json()}")
         print("PASSED")
 
+    def test_delete_city_with_temperatures(self):
+        # Add some temperatures for the secondary city
+        payload = {"id_oras": self.secondary_city_id, "valoare": 25.0, "timestamp": "2021-01-01T00:00:00"}
+        response = requests.post("http://localhost:5001/api/temperatures", json=payload)
+        self.assertEqual(response.status_code, 201, f"Failed to set up test temperature: {response.json()}")
+        temperature_id = response.json()["id"]
+
+        # Delete the city with temperatures
+        response = requests.delete(f"{BASE_URL_CITIES}/{self.secondary_city_id}")
+        self.assertEqual(response.status_code, 200, "Failed to delete city with temperatures")
+        print(f"DELETE /cities/{self.secondary_city_id} SUCCESS: {response.json()}")
+
+        # Check if the temperature was deleted
+        TEMPERATURES_URL = "http://localhost:5001/api/temperatures"
+        response = requests.get(f"{TEMPERATURES_URL}/cities/{base_city_id}")
+        self.assertNotIn(temperature_id, [temperature["id"] for temperature in response.json()], "Temperature not deleted")
+
+        print("PASSED")
+
+
 if __name__ == "__main__":
     unittest.main()

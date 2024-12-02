@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from bson.objectid import ObjectId
-from models import orase, tari
+from models import orase, tari, temperaturi
 
 ct_bp = Blueprint('cities', __name__)
 
@@ -132,6 +132,9 @@ def delete_city(id):
     # Check if id is a valid ObjectId
     if not is_valid_id(id):
         return jsonify({"error": "Invalid city ID"}), 400
+
+    # Delete all temperatures for the city
+    delete_temperatures_result = temperaturi.delete_many({"id_oras": {"$in": city_ids}})
 
     # Delete the city with the specified ID
     result = orase.delete_one({"_id": ObjectId(id)})
