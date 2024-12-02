@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from bson.objectid import ObjectId
-from models import tari
+from models import orase, tari
 
 cntrs_bp = Blueprint('countries', __name__)
 template_fields = {"_id": 1, "nume_tara": 1, "latitudine": 1, "longitudine": 1}
@@ -91,12 +91,24 @@ def delete_country(id):
     if not is_valid_id(id):
         return jsonify({"error": "Invalid ID"}), 400
     
-    # Delete the country with the specified ID
+    # Find all cities in the country
+    cities = orase.find({"id_tara": ObjectId(id)})
+    city_ids = [str(city["_id"]) for city in cities]
+
+    # Delete all temperatures for the cities in this country
+    if city_ids:
+        delete_temperatures_result = temperaturi.delete_many({"id_oras": {"$in": city_ids}})
+
+        # Delete all cities in the country
+        delete_cities_result = orase.delete_many({"id_tara": ObjectId(id)})
+    
+    # Delete the country itself
     result = tari.delete_one({"_id": ObjectId(id)})
 
     # Check if the country was found and deleted
     if result.deleted_count == 0:
         return jsonify({"error": "Country not found"}), 404
 
-    # Return a success message if the country was deleted
-    return jsonify({"message": "Country deleted"}), 200
+    # Return a success message if the country and related cities/temperatures were deleted
+    return jsonify({"message": "Country, cities, and temperatures deleted"}), 200
+

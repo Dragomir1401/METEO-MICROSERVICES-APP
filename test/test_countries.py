@@ -117,5 +117,37 @@ class TestCountriesAPI(unittest.TestCase):
         print(f"DELETE /countries/bad_id FAIL: {response.json()}")
         print("PASSED")
 
+    def test_delete_country_with_cities_with_temperatures(self):
+        # Test deleting a country with cities that have temperatures
+        # Add a base test city
+        CITIES_URL = "http://localhost:5001/api/cities"
+        payload = {"id_tara": self.base_country_id, "nume_oras": "Bucharest", "latitudine": 44.4268, "longitudine": 26.1025}
+        response = requests.post(CITIES_URL, json=payload)
+        self.assertEqual(response.status_code, 201, f"Failed to set up test city: {response.json()}")
+        base_city_id = response.json()["id"]
+
+        # Add a temperature for the base city
+        TEMPERATURES_URL = "http://localhost:5001/api/temperatures"
+        payload = {"id_oras": base_city_id, "valoare": 25.0, "timestamp": "2021-01-01T00:00:00Z"}
+        response = requests.post(TEMPERATURES_URL, json=payload)
+        self.assertEqual(response.status_code, 201, f"Failed to set up test temperature: {response.json()}")
+
+        # Test deleting the country
+        response = requests.delete(f"{COUNTRIES_URL}/{self.base_country_id}")
+        self.assertEqual(response.status_code, 200, "Failed to delete country with cities with temperatures")
+
+        # Assert that we dont have that city anymore
+        response = requests.get(f"{CITIES_URL}/country/{self.base_country_id}")
+        # Assert that response is country not found
+        self.assertEqual(response.json(), {"error": "Country not found"}, "Country not deleted")
+
+        # Assert that we dont have that temperature anymore
+        response = requests.get(f"{TEMPERATURES_URL}/cities/{base_city_id}")
+        # Assert that our temperature is not in response
+        self.assertNotIn(base_city_id, [temperature["id"] for temperature in response.json()], "Temperature not deleted")
+
+        print(f"DELETE /countries/{self.base_country_id} SUCCESS: {response.json()}")
+        print("PASSED")
+
 if __name__ == "__main__":
     unittest.main()

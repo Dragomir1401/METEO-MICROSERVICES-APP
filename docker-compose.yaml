@@ -3,24 +3,26 @@ version: "3.8"
 services:
   api:
     build:
-      context: ./app # Path to your Flask app directory
+      context: ./app
     container_name: flask_api
     ports:
-      - "5001:5000" # Expose Flask API on port 5000
+      - "${API_PORT:-5001}:5000"
     volumes:
-      - ./app:/app # Map the local "app" directory to the container's "/app"
+      - ./app:/app
     networks:
       - app_network
     depends_on:
-      - db # Ensure the database is started before the API
+      - db
+    environment:
+      - MONGO_URI=mongodb://db:27017
 
   db:
     image: mongo:6.0
     container_name: mongo_db
     volumes:
-      - mongo_data:/data/db # Persist MongoDB data
+      - mongo_data:/data/db
     ports:
-      - "27017:27017" # Expose MongoDB on default port
+      - "${DB_PORT:-27017}:27017"
     networks:
       - app_network
 
@@ -28,17 +30,17 @@ services:
     image: mongo-express:1.0.0-alpha.4
     container_name: mongo_express
     ports:
-      - "8081:8081" # Expose Mongo Express on port 8081
+      - "${MONGO_EXPRESS_PORT:-8081}:8081"
     environment:
-      - ME_CONFIG_MONGODB_SERVER=db # Link to the MongoDB service
+      - ME_CONFIG_MONGODB_SERVER=db
     networks:
       - app_network
     depends_on:
-      - db # Ensure MongoDB starts before Mongo Express
+      - db
 
 networks:
   app_network:
     driver: bridge
 
 volumes:
-  mongo_data: # Named volume for MongoDB persistence
+  mongo_data:
