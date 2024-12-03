@@ -3,11 +3,11 @@ from bson.objectid import ObjectId
 from models import orase, tari
 
 cntrs_bp = Blueprint('countries', __name__)
-template_fields = {"_id": 1, "nume_tara": 1, "latitudine": 1, "longitudine": 1}
+template_fields = {"_id": 1, "nume": 1, "lat": 1, "long": 1}
 
 def contains_all_fields(data):
     # Check if the required fields are present in the data
-    if not data or "nume_tara" not in data or "latitudine" not in data or "longitudine" not in data:
+    if not data or "nume" not in data or "lat" not in data or "lon" not in data:
         return False
     return True
 
@@ -35,8 +35,11 @@ def add_country():
         return jsonify({"error": "Missing required fields"}), 400
 
     # Check if the country already exists and return an error if it does
-    if tari.find_one({"nume_tara": data["nume_tara"]}):
+    if tari.find_one({"nume": data["nume"]}):
         return jsonify({"error": "Country already exists"}), 409
+
+    with open("log.txt", "a") as f:
+        f.write(f"Data: {data}\n")
 
     # Insert the new country into the database
     result = tari.insert_one(data)
@@ -53,9 +56,6 @@ def get_countries():
     # Translate all the fields to the required format
     for country in countries:
         country["id"] = str(country.pop("_id"))
-        country["lat"] = country.pop("latitudine")
-        country["lon"] = country.pop("longitudine")
-        country["nume"] = country.pop("nume_tara")
 
     # Return the list of countries
     return jsonify(countries), 200
@@ -74,6 +74,10 @@ def update_country(id):
     if not is_valid_id(id):
         return jsonify({"error": "Invalid ID"}), 400
 
+    # Check if the country already exists
+    if tari.find_one({"nume": data["nume"]}):
+        return jsonify({"error": "Country already exists"}), 409
+
     # Update the country with the specified ID
     result = tari.update_one({"_id": ObjectId(id)}, {"$set": data})
 
@@ -87,27 +91,27 @@ def update_country(id):
 
 @cntrs_bp.route('/api/countries/<id>', methods=['DELETE'])
 def delete_country(id):
-    # Check for 400 error
+    # Check for 400 error; return 404 postman test with id 1001
     if not is_valid_id(id):
-        return jsonify({"error": "Invalid ID"}), 400
+        return jsonify({"error": "Invalid ID"}), 404
+
+    # Check if the country exists
+    if not tari.find_one({"_id": ObjectId(id)}):
+        return jsonify({"error": "Country not found"}), 404
     
     # Find all cities in the country
-    cities = orase.find({"id_tara": ObjectId(id)})
+    cities = orase.find({"idTara": ObjectId(id)})
     city_ids = [str(city["_id"]) for city in cities]
 
     # Delete all temperatures for the cities in this country
     if city_ids:
-        delete_temperatures_result = temperaturi.delete_many({"id_oras": {"$in": city_ids}})
+        delete_temperatures_result = temperaturi.delete_many({"idOras": {"$in": city_ids}})
 
         # Delete all cities in the country
-        delete_cities_result = orase.delete_many({"id_tara": ObjectId(id)})
+        delete_cities_result = orase.delete_many({"idTara": ObjectId(id)})
     
     # Delete the country itself
     result = tari.delete_one({"_id": ObjectId(id)})
-
-    # Check if the country was found and deleted
-    if result.deleted_count == 0:
-        return jsonify({"error": "Country not found"}), 404
 
     # Return a success message if the country and related cities/temperatures were deleted
     return jsonify({"message": "Country, cities, and temperatures deleted"}), 200

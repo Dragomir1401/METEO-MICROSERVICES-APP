@@ -6,7 +6,7 @@ ct_bp = Blueprint('cities', __name__)
 
 def contains_all_fields(data):
     # Check if the required fields are present in the data
-    if not data or "id_tara" not in data or "nume_oras" not in data or "latitudine" not in data or "longitudine" not in data:
+    if not data or "idTara" not in data or "nume" not in data or "lat" not in data or "long" not in data:
         return False
     return True
 
@@ -24,13 +24,9 @@ def find_entity_by_id(id, countryOrCity):
         return orase.find_one({"_id": ObjectId(id)})
     return None
 
-def translate_fields(city, id_tara):
+def translate_fields(city):
     # Translate all the fields to the required format
     city["id"] = str(city.pop("_id"))
-    city["idTara"] = id_tara
-    city["nume"] = city.pop("nume_oras")
-    city["lat"] = city.pop("latitudine")
-    city["lon"] = city.pop("longitudine")
 
 @ct_bp.route('/api/cities/clear', methods=['DELETE'])
 def clear_cities():
@@ -48,15 +44,15 @@ def add_city():
         return jsonify({"error": "Missing required fields"}), 400
 
     # Check if the id of the country is a valid ObjectId
-    if not is_valid_id(data["id_tara"]):
+    if not is_valid_id(data["idTara"]):
         return jsonify({"error": "Invalid country ID"}), 400
 
     # Check if the country exists
-    if find_entity_by_id(data["id_tara"], "country") is None:
+    if find_entity_by_id(data["idTara"], "country") is None:
         return jsonify({"error": "Country not found"}), 404
 
     # Check if the city already exists in the country
-    if orase.find_one({"id_tara": data["id_tara"], "nume_oras": data["nume_oras"]}):
+    if orase.find_one({"idTara": data["idTara"], "nume": data["nume"]}):
         return jsonify({"error": "City already exists in the country"}), 409
 
     # Insert the new city into the database
@@ -69,31 +65,31 @@ def add_city():
 @ct_bp.route('/api/cities', methods=['GET'])
 def get_cities():
     # Specify the fields to include in the response
-    cities = list(orase.find({}, {"_id": 1, "id_tara": 1, "nume_oras": 1, "latitudine": 1, "longitudine": 1}))
+    cities = list(orase.find({}, {"_id": 1, "idTara": 1, "nume": 1, "lat": 1, "long": 1}))
 
     # Translate all the fields to the required format
     for city in cities:
-        translate_fields(city, city.pop("id_tara"))
+        translate_fields(city)
 
     # Return the list of cities
     return jsonify(cities), 200
 
-@ct_bp.route('/api/cities/country/<id_tara>', methods=['GET'])
-def get_cities_by_country(id_tara):
+@ct_bp.route('/api/cities/country/<idTara>', methods=['GET'])
+def get_cities_by_country(idTara):
     # Check if the id of the country is a valid ObjectId
-    if not is_valid_id(id_tara):
+    if not is_valid_id(idTara):
         return jsonify({"error": "Invalid country ID"}), 400
 
     # Check if city exists
-    if find_entity_by_id(id_tara, "country") is None:
+    if find_entity_by_id(idTara, "country") is None:
         return jsonify({"error": "Country not found"}), 404
 
     # Get the cities for the specified country
-    cities = list(orase.find({"id_tara": id_tara}, {"_id": 1, "nume_oras": 1, "latitudine": 1, "longitudine": 1}))
+    cities = list(orase.find({"idTara": idTara}, {"_id": 1, "nume": 1, "lat": 1, "long": 1}))
 
     # Translate all the fields to the required format
     for city in cities:
-        translate_fields(city, id_tara)
+        translate_fields(city)
 
     # Return the list of cities
     return jsonify(cities), 200
@@ -109,7 +105,7 @@ def update_city(id):
         return jsonify({"error": "Missing required fields"}), 400
 
     # Check if the country exists
-    if find_entity_by_id(data["id_tara"], "country") is None:
+    if find_entity_by_id(data["idTara"], "country") is None:
         return jsonify({"error": "Country not found"}), 404
 
     # Check for bad id
@@ -134,7 +130,7 @@ def delete_city(id):
         return jsonify({"error": "Invalid city ID"}), 400
 
     # Delete all temperatures for the city
-    delete_temperatures_result = temperaturi.delete_many({"id_oras": {"$in": city_ids}})
+    delete_temperatures_result = temperaturi.delete_many({"idOras": {"$in": city_ids}})
 
     # Delete the city with the specified ID
     result = orase.delete_one({"_id": ObjectId(id)})

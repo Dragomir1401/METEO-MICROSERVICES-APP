@@ -4,14 +4,14 @@ from pymongo import MongoClient, ASCENDING
 client = MongoClient("mongodb://db:27017/")
 db = client["weather_db"]
 
-# Tari Collection
-tari = db["Tari"]
-tari.create_index([("nume_tara", ASCENDING)], unique=True)
+# Tari Collection - Country Collection
+tari = db["tari"]
+tari.create_index([("nume", ASCENDING)], unique=True)
 
-# Orase Collection
-orase = db["Orase"]
-orase.create_index([("id_tara", ASCENDING), ("nume_oras", ASCENDING)], unique=True)
+# Orase Collection - City Collection
+orase = db["orase"]
+orase.create_index([("nume", ASCENDING), ("id_tara", ASCENDING)], unique=True)
 
-# Temperaturi Collection
-temperaturi = db["Temperaturi"]
-temperaturi.create_index([("id_oras", ASCENDING), ("timestamp", ASCENDING)], unique=True)
+# Temperaturi Collection - Temperature Collection
+temperaturi = db["temperaturi"]
+temperaturi.create_index([("idOras", ASCENDING), ("timestamp", ASCENDING)], unique=True)

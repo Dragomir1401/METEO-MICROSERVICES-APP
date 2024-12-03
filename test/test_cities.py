@@ -168,7 +168,7 @@ class TestCitiesAPI(unittest.TestCase):
 
     def test_delete_city_with_temperatures(self):
         # Add some temperatures for the secondary city
-        payload = {"id_oras": self.secondary_city_id, "valoare": 25.0, "timestamp": "2021-01-01T00:00:00"}
+        payload = {"idOras": self.secondary_city_id, "valoare": 25.0, "timestamp": "2021-01-01T00:00:00"}
         response = requests.post("http://localhost:5001/api/temperatures", json=payload)
         self.assertEqual(response.status_code, 201, f"Failed to set up test temperature: {response.json()}")
         temperature_id = response.json()["id"]

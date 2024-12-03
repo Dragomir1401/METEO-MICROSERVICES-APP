@@ -1,7 +1,68 @@
-temp_query: {'timestamp': {'$gte': datetime.datetime(2019, 1, 1, 0, 0)}}
-temp_query: {'timestamp': {'$gte': datetime.datetime(2028, 1, 1, 0, 0)}}
-temp_query: {'timestamp': {'$gte': datetime.datetime(2019, 1, 1, 0, 0)}}
-temp_query: {'timestamp': {'$gte': datetime.datetime(2028, 1, 1, 0, 0)}}
-temperatures: []
-temp_query: {'timestamp': {'$gte': datetime.datetime(2019, 1, 1, 0, 0)}}
-temp_query: {'timestamp': {'$gte': datetime.datetime(2028, 1, 1, 0, 0)}}
+Data: {'nume': 'UK', 'lat': 20.1, 'lon': 40.2}
+Data: {'nume': 'UK', 'lat': 20.1, 'lon': 40.2}
+Data: {'nume': 'France', 'lat': 30.5, 'lon': 30.5}
+Data: {'nume': 'Romania', 'lat': 30.5, 'lon': 40.2}
+Data: {'nume': 'UK', 'lat': 20.1, 'lon': 40.2}
+Data: {'nume': 'France', 'lat': 30.5, 'lon': 30.5}
+Data: {'nume': 'Germany', 'lat': 30.5, 'lon': 50.2}
+Data: {'nume': 'Italy', 'lat': 20.1, 'lon': 50.2}
+Data: {'nume': 'Romania', 'lat': 30.5, 'lon': 40.2}
+Data: {'nume': 'UK', 'lat': 20.1, 'lon': 40.2}
+Data: {'nume': 'France', 'lat': 30.5, 'lon': 30.5}
+Data: {'nume': 'Germany', 'lat': 30.5, 'lon': 50.2}
+Data: {'nume': 'Italy', 'lat': 20.1, 'lon': 50.2}
+Data: {'nume': 'Romania', 'lat': 30.5, 'lon': 40.2}
+Data: {'nume': 'UK', 'lat': 20.1, 'lon': 40.2}
+Data: {'nume': 'France', 'lat': 30.5, 'lon': 30.5}
+Data: {'nume': 'Germany', 'lat': 30.5, 'lon': 50.2}
+Data: {'nume': 'Italy', 'lat': 20.1, 'lon': 50.2}
+Data: {'nume': 'Romania', 'lat': 30.5, 'lon': 40.2}
+Data: {'nume': 'UK', 'lat': 20.1, 'lon': 40.2}
+Data: {'nume': 'France', 'lat': 30.5, 'lon': 30.5}
+Data: {'nume': 'Germany', 'lat': 30.5, 'lon': 50.2}
+Data: {'nume': 'Italy', 'lat': 20.1, 'lon': 50.2}
+Data: {'nume': 'Romania', 'lat': 30.5, 'lon': 40.2}
+Data: {'nume': 'UK', 'lat': 20.1, 'lon': 40.2}
+Data: {'nume': 'France', 'lat': 30.5, 'lon': 30.5}
+Data: {'nume': 'Germany', 'lat': 30.5, 'lon': 50.2}
+Data: {'nume': 'Italy', 'lat': 20.1, 'lon': 50.2}
+Data: {'nume': 'Romania', 'lat': 30.5, 'lon': 40.2}
+Data: {'nume': 'Romania', 'lat': 30.5, 'lon': 40.2}
+Data: {'nume': 'UK', 'lat': 20.1, 'lon': 40.2}
+Data: {'nume': 'France', 'lat': 30.5, 'lon': 30.5}
+Data: {'nume': 'Germany', 'lat': 30.5, 'lon': 50.2}
+Data: {'nume': 'Romania', 'lat': 30.5, 'lon': 40.2}
+Data: {'nume': 'UK', 'lat': 20.1, 'lon': 40.2}
+Data: {'nume': 'France', 'lat': 30.5, 'lon': 30.5}
+Data: {'nume': 'Germany', 'lat': 30.5, 'lon': 50.2}
+Data: {'nume': 'Italy', 'lat': 20.1, 'lon': 50.2}
+Data: {'nume': 'Romania', 'lat': 30.5, 'lon': 40.2}
+Data: {'nume': 'UK', 'lat': 20.1, 'lon': 40.2}
+Data: {'nume': 'France', 'lat': 30.5, 'lon': 30.5}
+Data: {'nume': 'Germany', 'lat': 30.5, 'lon': 50.2}
+Data: {'nume': 'Italy', 'lat': 20.1, 'lon': 50.2}
+Data: {'nume': 'Romania', 'lat': 30.5, 'lon': 40.2}
+Data: {'nume': 'UK', 'lat': 20.1, 'lon': 40.2}
+Data: {'nume': 'France', 'lat': 30.5, 'lon': 30.5}
+Data: {'nume': 'Germany', 'lat': 30.5, 'lon': 50.2}
+Data: {'nume': 'Italy', 'lat': 20.1, 'lon': 50.2}
+Data: {'nume': 'Romania', 'lat': 30.5, 'lon': 40.2}
+Data: {'nume': 'UK', 'lat': 20.1, 'lon': 40.2}
+Data: {'nume': 'France', 'lat': 30.5, 'lon': 30.5}
+Data: {'nume': 'Germany', 'lat': 30.5, 'lon': 50.2}
+Data: {'nume': 'Italy', 'lat': 20.1, 'lon': 50.2}
+Data: {'nume': 'Romania', 'lat': 30.5, 'lon': 40.2}
+Data: {'nume': 'UK', 'lat': 20.1, 'lon': 40.2}
+Data: {'nume': 'France', 'lat': 30.5, 'lon': 30.5}
+Data: {'nume': 'Germany', 'lat': 30.5, 'lon': 50.2}
+Data: {'nume': 'Italy', 'lat': 20.1, 'lon': 50.2}
+Data: {'nume': 'Romania', 'lat': 30.5, 'lon': 40.2}
+Data: {'nume': 'UK', 'lat': 20.1, 'lon': 40.2}
+Data: {'nume': 'France', 'lat': 30.5, 'lon': 30.5}
+Data: {'nume': 'Germany', 'lat': 30.5, 'lon': 50.2}
+Data: {'nume': 'Italy', 'lat': 20.1, 'lon': 50.2}
+Data: {'nume': 'Romania', 'lat': 30.5, 'lon': 40.2}
+Data: {'nume': 'UK', 'lat': 20.1, 'lon': 40.2}
+Data: {'nume': 'France', 'lat': 30.5, 'lon': 30.5}
+Data: {'nume': 'Germany', 'lat': 30.5, 'lon': 50.2}
+Data: {'nume': 'Italy', 'lat': 20.1, 'lon': 50.2}

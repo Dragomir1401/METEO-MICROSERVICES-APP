@@ -7,7 +7,7 @@ tmp_bp = Blueprint('temperatures', __name__)
 
 def contains_all_fields(data):
     # Check if the required fields are present in the data
-    if not data or "id_oras" not in data or "valoare" not in data:
+    if not data or "idOras" not in data or "valoare" not in data:
         return False
     return True
 
@@ -34,7 +34,7 @@ def find_entity_by_id(id, countryOrCity):
 
 @tmp_bp.route('/api/temperatures', methods=['POST'])
 def add_temperature():
-    # Get the JSON data from the request
+    # Get the JSON body from the request
     data = request.json
 
     # Check if the required fields are present in the data
@@ -42,18 +42,18 @@ def add_temperature():
         return jsonify({"error": "Missing required fields"}), 400
 
     # Check if the id is valid
-    if not is_valid_id(data["id_oras"]):
+    if not is_valid_id(data["idOras"]):
         return jsonify({"error": "Invalid city ID"}), 400
 
     # Check if the city exists
-    if not find_entity_by_id(data["id_oras"], "city"):
+    if not find_entity_by_id(data["idOras"], "city"):
         return jsonify({"error": "City not found"}), 404
 
     # Add the timestamp to the data
     data["timestamp"] = datetime.utcnow()
 
     # Check if the temperature already exists for this timestamp
-    if temperaturi.find_one({"id_oras": data["id_oras"], "timestamp": data["timestamp"]}):
+    if temperaturi.find_one({"idOras": data["idOras"], "timestamp": data["timestamp"]}):
         return jsonify({"error": "Temperature already exists for this timestamp"}), 409
 
     # Insert the new temperature into the database
@@ -118,11 +118,9 @@ def get_temperatures():
         # Run the query
         city = orase.find_one(city_query)
 
-        # Check if the city was found
+        # Check if the city was found return empty list
         if not city:
-            with open("log.txt", "a") as f:
-                f.write(f"city_query: {city_query}\n")
-            return jsonify({"error": "City not found"}), 404
+            return jsonify([]), 200
 
         # Extract the city ID from ObjectId
         city_id = str(city["_id"])
@@ -131,7 +129,7 @@ def get_temperatures():
     if city_id is None:
         temp_query = {}
     else:
-        temp_query = {"id_oras": city_id}
+        temp_query = {"idOras": city_id}
 
     # Construct the timestamp query
     temp_query = construct_date_qurery(from_date, until_date, temp_query)
@@ -150,23 +148,23 @@ def get_temperatures():
     # Format the response
     return format_temperature_response(temperatures)
 
-@tmp_bp.route('/api/temperatures/cities/<id_oras>', methods=['GET'])
-def get_city_temperatures(id_oras):
+@tmp_bp.route('/api/temperatures/cities/<idOras>', methods=['GET'])
+def get_city_temperatures(idOras):
     # Check if the id is valid
-    if not is_valid_id(id_oras):
+    if not is_valid_id(idOras):
         return jsonify({"error": "Invalid city ID"}), 400
 
-    # Check if the city exists
-    city = find_entity_by_id(id_oras, "city")
+    # Check if the city exists return empty list
+    city = find_entity_by_id(idOras, "city")
     if not city:
-        return jsonify({"error": "City not found"}), 404
+        return jsonify([]), 200
 
     # Parse the query parameters for date filtering
     from_date = request.args.get("from")
     until_date = request.args.get("until")
 
     # Construct the query
-    temp_query = {"id_oras": id_oras}
+    temp_query = {"idOras": idOras}
     temp_query = construct_date_qurery(from_date, until_date, temp_query)
 
     if temp_query == -1:
@@ -189,10 +187,10 @@ def get_country_temperatures(id_tara):
     if not is_valid_id(id_tara):
         return jsonify({"error": "Invalid country ID"}), 400
 
-    # Check if the country exists
+    # Check if the country exists return empty list
     country = find_entity_by_id(id_tara, "country")
     if not country:
-        return jsonify({"error": "Country not found"}), 404
+        return jsonify([]), 200
 
     # Parse the query parameters for date filtering
     from_date = request.args.get("from")
@@ -202,7 +200,7 @@ def get_country_temperatures(id_tara):
     cities = list(orase.find({"id_tara": id_tara}, {"_id": 1}))
 
     # Construct the query
-    temp_query = {"id_oras": {"$in": [str(city["_id"]) for city in cities]}}
+    temp_query = {"idOras": {"$in": [str(city["_id"]) for city in cities]}}
     temp_query = construct_date_qurery(from_date, until_date, temp_query)
 
     if temp_query == -1:
@@ -239,8 +237,8 @@ def update_temperature(id):
     # Update the temperature with the specified ID
     result = temperaturi.update_one({"_id": ObjectId(id)}, {"$set": data})
 
-    # Translate the id_oras field to idOras
-    data["idOras"] = data.pop("id_oras")
+    # Translate the idOras field to idOras
+    data["idOras"] = data.pop("idOras")
 
     # Return a success message
     return jsonify({"message": "Temperature updated"}), 200
