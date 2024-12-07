@@ -117,7 +117,7 @@ def update_city(id):
         return jsonify({"error": "Invalid city ID to be updated"}), 400
     
     # Check for bad id
-    if not is_valid_id(data["id"]):
+    if "id" in data and not is_valid_id(data["id"]):
         return jsonify({"error": "Invalid city ID to update with"}), 400
     
     # Check if the city already exists by name in that country
