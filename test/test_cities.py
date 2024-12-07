@@ -13,6 +13,11 @@ class TestCitiesAPI(unittest.TestCase):
         clear_cities_response = requests.delete(f"{BASE_URL_CITIES}/clear")
         self.assertEqual(clear_cities_response.status_code, 200, "Failed to clear cities")
 
+        # Clear all temperatures
+        TEMPERATURES_URL = "http://localhost:5001/api/temperatures"
+        clear_response = requests.delete(f"{TEMPERATURES_URL}/clear")
+        self.assertEqual(clear_response.status_code, 200, "Failed to clear temperatures")
+
         # Create a base country for tests
         payload = {"nume": "Romania", "lat": 45.9432, "lon": 24.9668}
         response = requests.post(BASE_URL_COUNTRIES, json=payload)
@@ -170,7 +175,7 @@ class TestCitiesAPI(unittest.TestCase):
     def test_delete_city_bad_id(self):
         # Test deleting a city with a bad ID (400 Fail Case)
         response = requests.delete(f"{BASE_URL_CITIES}/bad_id")
-        self.assertEqual(response.status_code, 404, "Bad ID meaning non existing city not handled")
+        self.assertEqual(response.status_code, 400, "Bad ID meaning non existing city not handled")
         print(f"DELETE /cities/bad_id FAIL: {response.json()}")
         print("PASSED")
 
