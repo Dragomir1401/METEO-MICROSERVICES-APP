@@ -104,13 +104,25 @@ def update_city(id):
     if not contains_all_fields(data):
         return jsonify({"error": "Missing required fields"}), 400
 
+    # Check for invalid country ID
+    if not is_valid_id(data["idTara"]):
+        return jsonify({"error": "Invalid country ID"}), 400
+    
     # Check if the country exists
     if find_entity_by_id(data["idTara"], "country") is None:
         return jsonify({"error": "Country not found"}), 404
 
     # Check for bad id
     if not is_valid_id(id):
-        return jsonify({"error": "Invalid city ID"}), 400
+        return jsonify({"error": "Invalid city ID to be updated"}), 400
+    
+    # Check for bad id
+    if not is_valid_id(data["id"]):
+        return jsonify({"error": "Invalid city ID to update with"}), 400
+    
+    # Check if the city already exists by name in that country
+    if orase.find_one({"idTara": data["idTara"], "nume": data["nume"]}):
+        return jsonify({"error": "City already exists in the country"}), 409
 
     # Update the city with the specified ID
     result = orase.update_one({"_id": ObjectId(id)}, {"$set": data})
@@ -127,10 +139,10 @@ def update_city(id):
 def delete_city(id):
     # Check if id is a valid ObjectId
     if not is_valid_id(id):
-        return jsonify({"error": "Invalid city ID"}), 400
+        return jsonify({"error": "Invalid city ID"}), 404
 
     # Delete all temperatures for the city
-    delete_temperatures_result = temperaturi.delete_many({"idOras": {"$in": city_ids}})
+    temperaturi.delete_many({"idOras": {"$in": [ObjectId(id)]}})
 
     # Delete the city with the specified ID
     result = orase.delete_one({"_id": ObjectId(id)})
