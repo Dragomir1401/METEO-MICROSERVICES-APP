@@ -66,3 +66,143 @@ Data: {'nume': 'UK', 'lat': 20.1, 'lon': 40.2}
 Data: {'nume': 'France', 'lat': 30.5, 'lon': 30.5}
 Data: {'nume': 'Germany', 'lat': 30.5, 'lon': 50.2}
 Data: {'nume': 'Italy', 'lat': 20.1, 'lon': 50.2}
+Data: {'nume': 'Romania', 'lat': 30.5, 'lon': 40.2}
+Data: {'nume': 'UK', 'lat': 20.1, 'lon': 40.2}
+Data: {'nume': 'France', 'lat': 30.5, 'lon': 30.5}
+Data: {'nume': 'Germany', 'lat': 30.5, 'lon': 50.2}
+Data: {'nume': 'Italy', 'lat': 20.1, 'lon': 50.2}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Bulgaria', 'lat': 42.7339, 'lon': 25.4858}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Bulgaria', 'lat': 42.7339, 'lon': 25.4858}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Bulgaria', 'lat': 42.7339, 'lon': 25.4858}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Bulgaria', 'lat': 42.7339, 'lon': 25.4858}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Bulgaria', 'lat': 42.7339, 'lon': 25.4858}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}
+Data: {'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+Data: {'nume': 'United States', 'lat': 37.0902, 'lon': -95.7129}

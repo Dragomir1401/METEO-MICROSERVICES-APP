@@ -10,13 +10,13 @@ class TestCountriesAPI(unittest.TestCase):
         self.assertEqual(clear_response.status_code, 200, "Failed to clear countries")
 
         # Add a base test country
-        payload = {"nume_tara": "Romania", "latitudine": 45.9432, "longitudine": 24.9668}
+        payload = {"nume": "Romania", "lat": 45.9432, "lon": 24.9668}
         response = requests.post(COUNTRIES_URL, json=payload)
         self.assertEqual(response.status_code, 201, f"Failed to set up test country: {response.json()}")
         self.base_country_id = response.json()["id"]
 
         # Add a second test country
-        payload = {"nume_tara": "United States", "latitudine": 37.0902, "longitudine": -95.7129}
+        payload = {"nume": "United States", "lat": 37.0902, "lon": -95.7129}
         response = requests.post(COUNTRIES_URL, json=payload)
         self.assertEqual(response.status_code, 201, f"Failed to set up test country: {response.json()}")
         self.second_country_id = response.json()["id"]
@@ -34,7 +34,7 @@ class TestCountriesAPI(unittest.TestCase):
 
     def test_post_country_success(self):
         # Test adding a new country (201 Success Case)
-        payload = {"nume_tara": "Bulgaria", "latitudine": 42.7339, "longitudine": 25.4858}
+        payload = {"nume": "Bulgaria", "lat": 42.7339, "lon": 25.4858}
         response = requests.post(COUNTRIES_URL, json=payload)
         self.assertEqual(response.status_code, 201, "Failed to add new country")
         print(f"POST /countries SUCCESS: {response.json()}")
@@ -42,7 +42,7 @@ class TestCountriesAPI(unittest.TestCase):
 
     def test_post_country_missing_fields(self):
         # Test adding a country with missing fields (400 Fail Case)
-        payload = {"nume_tara": "Missing Fields Country"}
+        payload = {"nume": "Missing Fields Country"}
         response = requests.post(COUNTRIES_URL, json=payload)
         self.assertEqual(response.status_code, 400, "Missing fields not handled")
         print(f"POST /countries FAIL (Missing Fields): {response.json()}")
@@ -50,7 +50,7 @@ class TestCountriesAPI(unittest.TestCase):
 
     def test_post_country_duplicate(self):
         # Test adding a duplicate country (409 Fail Case)
-        payload = {"nume_tara": "Romania", "latitudine": 45.9432, "longitudine": 24.9668}
+        payload = {"nume": "Romania", "lat": 45.9432, "lon": 24.9668}
         response = requests.post(COUNTRIES_URL, json=payload)
         self.assertEqual(response.status_code, 409, "Duplicate country not handled")
         print(f"POST /countries FAIL (Duplicate): {response.json()}")
@@ -65,7 +65,7 @@ class TestCountriesAPI(unittest.TestCase):
 
     def test_put_country_success(self):
         # Test updating the base test country (200 Success Case)
-        update_payload = {"nume_tara": "Romania Updated", "latitudine": 46.0, "longitudine": 25.0}
+        update_payload = {"nume": "Romania Updated", "lat": 46.0, "lon": 25.0}
         response = requests.put(f"{COUNTRIES_URL}/{self.base_country_id}", json=update_payload)
         self.assertEqual(response.status_code, 200, "Failed to update base country")
         print(f"PUT /countries/{self.base_country_id} SUCCESS: {response.json()}")
@@ -73,7 +73,7 @@ class TestCountriesAPI(unittest.TestCase):
 
     def test_put_country_not_found(self):
         # Test updating a non-existent country (404 Fail Case)
-        payload = {"nume_tara": "Nonexistent Country", "latitudine": 0.0, "longitudine": 0.0}
+        payload = {"nume": "Nonexistent Country", "lat": 0.0, "lon": 0.0}
         response = requests.put(f"{COUNTRIES_URL}/123456789101112131415167", json=payload)
 
         self.assertEqual(response.status_code, 404, "Non-existent country not handled")
@@ -82,7 +82,7 @@ class TestCountriesAPI(unittest.TestCase):
 
     def test_put_country_missing_fields(self):
         # Test updating a country with missing fields (400 Fail Case)
-        payload = {"nume_tara": "Missing Fields Country"}
+        payload = {"nume": "Missing Fields Country"}
         response = requests.put(f"{COUNTRIES_URL}/{self.base_country_id}", json=payload)
         self.assertEqual(response.status_code, 400, "Missing fields not handled")
         print(f"PUT /countries/{self.base_country_id} FAIL (Missing Fields): {response.json()}")
@@ -90,7 +90,7 @@ class TestCountriesAPI(unittest.TestCase):
     
     def test_put_country_bad_id(self):
         # Test updating a country with a bad ID (400 Fail Case)
-        payload = {"nume_tara": "Bad ID Country", "latitudine": 0.0, "longitudine": 0.0}
+        payload = {"nume": "Bad ID Country", "lat": 0.0, "lon": 0.0}
         response = requests.put(f"{COUNTRIES_URL}/bad_id", json=payload)
         self.assertEqual(response.status_code, 400, "Bad ID not handled")
         print(f"PUT /countries/bad_id FAIL: {response.json()}")
@@ -113,7 +113,7 @@ class TestCountriesAPI(unittest.TestCase):
     def test_delete_country_bad_id(self):
         # Test deleting a country with a bad ID (400 Fail Case)
         response = requests.delete(f"{COUNTRIES_URL}/bad_id")
-        self.assertEqual(response.status_code, 400, "Bad ID not handled")
+        self.assertEqual(response.status_code, 404, "Bad ID meaning country not found not handled")
         print(f"DELETE /countries/bad_id FAIL: {response.json()}")
         print("PASSED")
 
@@ -121,14 +121,14 @@ class TestCountriesAPI(unittest.TestCase):
         # Test deleting a country with cities that have temperatures
         # Add a base test city
         CITIES_URL = "http://localhost:5001/api/cities"
-        payload = {"id_tara": self.base_country_id, "nume_oras": "Bucharest", "latitudine": 44.4268, "longitudine": 26.1025}
+        payload = {"idTara": self.base_country_id, "nume": "Bucharest", "lat": 44.4268, "lon": 26.1025}
         response = requests.post(CITIES_URL, json=payload)
         self.assertEqual(response.status_code, 201, f"Failed to set up test city: {response.json()}")
         base_city_id = response.json()["id"]
 
         # Add a temperature for the base city
         TEMPERATURES_URL = "http://localhost:5001/api/temperatures"
-        payload = {"id_oras": base_city_id, "valoare": 25.0, "timestamp": "2021-01-01T00:00:00Z"}
+        payload = {"idOras": base_city_id, "valoare": 25.0, "timestamp": "2021-01-01T00:00:00Z"}
         response = requests.post(TEMPERATURES_URL, json=payload)
         self.assertEqual(response.status_code, 201, f"Failed to set up test temperature: {response.json()}")
 

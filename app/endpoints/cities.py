@@ -6,7 +6,7 @@ ct_bp = Blueprint('cities', __name__)
 
 def contains_all_fields(data):
     # Check if the required fields are present in the data
-    if not data or "idTara" not in data or "nume" not in data or "lat" not in data or "long" not in data:
+    if not data or "idTara" not in data or "nume" not in data or "lat" not in data or "lon" not in data:
         return False
     return True
 
@@ -65,7 +65,7 @@ def add_city():
 @ct_bp.route('/api/cities', methods=['GET'])
 def get_cities():
     # Specify the fields to include in the response
-    cities = list(orase.find({}, {"_id": 1, "idTara": 1, "nume": 1, "lat": 1, "long": 1}))
+    cities = list(orase.find({}, {"_id": 1, "idTara": 1, "nume": 1, "lat": 1, "lon": 1}))
 
     # Translate all the fields to the required format
     for city in cities:
@@ -85,7 +85,7 @@ def get_cities_by_country(idTara):
         return jsonify({"error": "Country not found"}), 404
 
     # Get the cities for the specified country
-    cities = list(orase.find({"idTara": idTara}, {"_id": 1, "nume": 1, "lat": 1, "long": 1}))
+    cities = list(orase.find({"idTara": idTara}, {"_id": 1, "nume": 1, "lat": 1, "lon": 1}))
 
     # Translate all the fields to the required format
     for city in cities:
