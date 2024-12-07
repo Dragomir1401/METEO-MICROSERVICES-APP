@@ -23,3 +23,29 @@ All the cities in the database:
 [{'_id': ObjectId('675455b644e67adfc1b5fc9c'), 'idTara': '675455b544e67adfc1b5fc97'}, {'_id': ObjectId('675455b644e67adfc1b5fc9d'), 'idTara': '675455b544e67adfc1b5fc97'}, {'_id': ObjectId('675455b644e67adfc1b5fc9e'), 'idTara': '675455b544e67adfc1b5fc97'}, {'_id': ObjectId('675455b644e67adfc1b5fc9f'), 'idTara': '675455b544e67adfc1b5fc97'}]
 Found cities: [{'_id': ObjectId('675455b644e67adfc1b5fc9c')}, {'_id': ObjectId('675455b644e67adfc1b5fc9d')}, {'_id': ObjectId('675455b644e67adfc1b5fc9e')}, {'_id': ObjectId('675455b644e67adfc1b5fc9f')}]
 Found temperatures: [{'_id': ObjectId('675455b644e67adfc1b5fca0'), 'valoare': 32.5, 'timestamp': datetime.datetime(2024, 12, 7, 14, 3, 34, 432000)}, {'_id': ObjectId('675455b644e67adfc1b5fca1'), 'valoare': 28.5, 'timestamp': datetime.datetime(2024, 12, 7, 14, 3, 34, 476000)}, {'_id': ObjectId('675455b644e67adfc1b5fca2'), 'valoare': 26.12, 'timestamp': datetime.datetime(2024, 12, 7, 14, 3, 34, 517000)}, {'_id': ObjectId('675455b644e67adfc1b5fca3'), 'valoare': 32.5, 'timestamp': datetime.datetime(2024, 12, 7, 14, 3, 34, 560000)}, {'_id': ObjectId('675455b644e67adfc1b5fca4'), 'valoare': 28.5, 'timestamp': datetime.datetime(2024, 12, 7, 14, 3, 34, 603000)}, {'_id': ObjectId('675455b644e67adfc1b5fca5'), 'valoare': 26.12, 'timestamp': datetime.datetime(2024, 12, 7, 14, 3, 34, 647000)}, {'_id': ObjectId('675455b644e67adfc1b5fca6'), 'valoare': 32.5, 'timestamp': datetime.datetime(2024, 12, 7, 14, 3, 34, 696000)}, {'_id': ObjectId('675455b644e67adfc1b5fca7'), 'valoare': 28.5, 'timestamp': datetime.datetime(2024, 12, 7, 14, 3, 34, 738000)}, {'_id': ObjectId('675455b644e67adfc1b5fca8'), 'valoare': 26.12, 'timestamp': datetime.datetime(2024, 12, 7, 14, 3, 34, 776000)}]
+[{'_id': ObjectId('67545698c4b203d522f3c870')}]
+Found country: {'_id': ObjectId('67545698c4b203d522f3c870'), 'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+All the cities in the database:
+[{'_id': ObjectId('67545698c4b203d522f3c871'), 'idTara': '67545698c4b203d522f3c870'}, {'_id': ObjectId('67545698c4b203d522f3c872'), 'idTara': '67545698c4b203d522f3c870'}]
+Found cities: [{'_id': ObjectId('67545698c4b203d522f3c871')}, {'_id': ObjectId('67545698c4b203d522f3c872')}]
+Found temperatures: [{'_id': ObjectId('67545698c4b203d522f3c873'), 'valoare': 22.5, 'timestamp': datetime.datetime(2024, 12, 7, 14, 7, 20, 703000)}, {'_id': ObjectId('67545698c4b203d522f3c874'), 'valoare': 23.0, 'timestamp': datetime.datetime(2024, 12, 7, 14, 7, 20, 714000)}, {'_id': ObjectId('67545698c4b203d522f3c875'), 'valoare': 24.0, 'timestamp': datetime.datetime(2024, 12, 7, 14, 7, 20, 725000)}, {'_id': ObjectId('67545698c4b203d522f3c876'), 'valoare': 25.0, 'timestamp': datetime.datetime(2024, 12, 7, 14, 7, 20, 739000)}]
+[{'_id': ObjectId('67545698c4b203d522f3c877')}]
+[{'_id': ObjectId('67545698c4b203d522f3c87e')}]
+Found country: {'_id': ObjectId('67545698c4b203d522f3c87e'), 'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+All the cities in the database:
+[{'_id': ObjectId('67545698c4b203d522f3c87f'), 'idTara': '67545698c4b203d522f3c87e'}, {'_id': ObjectId('67545698c4b203d522f3c880'), 'idTara': '67545698c4b203d522f3c87e'}]
+Found cities: [{'_id': ObjectId('67545698c4b203d522f3c87f')}, {'_id': ObjectId('67545698c4b203d522f3c880')}]
+Found temperatures: [{'_id': ObjectId('67545698c4b203d522f3c881'), 'valoare': 22.5, 'timestamp': datetime.datetime(2024, 12, 7, 14, 7, 20, 945000)}, {'_id': ObjectId('67545698c4b203d522f3c882'), 'valoare': 23.0, 'timestamp': datetime.datetime(2024, 12, 7, 14, 7, 20, 956000)}, {'_id': ObjectId('67545698c4b203d522f3c883'), 'valoare': 24.0, 'timestamp': datetime.datetime(2024, 12, 7, 14, 7, 20, 969000)}, {'_id': ObjectId('67545698c4b203d522f3c884'), 'valoare': 25.0, 'timestamp': datetime.datetime(2024, 12, 7, 14, 7, 20, 980000)}]
+[{'_id': ObjectId('67545699c4b203d522f3c885')}]
+[{'_id': ObjectId('67545699c4b203d522f3c88c')}]
+Found country: {'_id': ObjectId('67545699c4b203d522f3c88c'), 'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+All the cities in the database:
+[{'_id': ObjectId('67545699c4b203d522f3c88d'), 'idTara': '67545699c4b203d522f3c88c'}, {'_id': ObjectId('67545699c4b203d522f3c88e'), 'idTara': '67545699c4b203d522f3c88c'}]
+Found cities: [{'_id': ObjectId('67545699c4b203d522f3c88d')}, {'_id': ObjectId('67545699c4b203d522f3c88e')}]
+Found temperatures: (<Response 37 bytes [200 OK]>, 400)
+[{'_id': ObjectId('67545699c4b203d522f3c893')}]
+Found country: {'_id': ObjectId('67545699c4b203d522f3c893'), 'nume': 'Romania', 'lat': 45.9432, 'lon': 24.9668}
+All the cities in the database:
+[{'_id': ObjectId('67545699c4b203d522f3c894'), 'idTara': '67545699c4b203d522f3c893'}, {'_id': ObjectId('67545699c4b203d522f3c895'), 'idTara': '67545699c4b203d522f3c893'}]
+Found cities: [{'_id': ObjectId('67545699c4b203d522f3c894')}, {'_id': ObjectId('67545699c4b203d522f3c895')}]
+Found temperatures: [{'_id': ObjectId('67545699c4b203d522f3c896'), 'valoare': 22.5, 'timestamp': datetime.datetime(2024, 12, 7, 14, 7, 21, 451000)}, {'_id': ObjectId('67545699c4b203d522f3c897'), 'valoare': 23.0, 'timestamp': datetime.datetime(2024, 12, 7, 14, 7, 21, 463000)}, {'_id': ObjectId('67545699c4b203d522f3c898'), 'valoare': 24.0, 'timestamp': datetime.datetime(2024, 12, 7, 14, 7, 21, 477000)}, {'_id': ObjectId('67545699c4b203d522f3c899'), 'valoare': 25.0, 'timestamp': datetime.datetime(2024, 12, 7, 14, 7, 21, 487000)}]

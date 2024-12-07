@@ -31,6 +31,12 @@ def find_entity_by_id(id, countryOrCity):
         return orase.find_one({"_id": ObjectId(id)})
     return None
 
+def check_correct_date_format(from_date, until_date):
+    # If we have from or until date and they are not in the correct format
+    if (from_date and not from_date.replace("-", "").replace("T", "").replace(":", "").isdigit()) or (until_date and not until_date.replace("-", "").replace("T", "").replace(":", "").isdigit()):
+        return False
+    return True
+
 
 @tmp_bp.route('/api/temperatures', methods=['POST'])
 def add_temperature():
@@ -40,7 +46,7 @@ def add_temperature():
     # Check if the required fields are present in the data
     if not contains_all_fields(data):
         return jsonify({"error": "Missing required fields"}), 400
-
+    
     # Check if the id is valid
     if not is_valid_id(data["idOras"]):
         return jsonify({"error": "Invalid city ID"}), 400
@@ -88,6 +94,7 @@ def format_temperature_response(temperatures):
     response = [
         {
             "id": str(temp["_id"]),
+            "valoare": temp["valoare"],
             "timestamp": temp["timestamp"].isoformat()
         }
         for temp in temperatures
@@ -107,7 +114,7 @@ def find_temperatures_for_cities(cities, from_date, until_date):
             if temp_query == -1:
                 return jsonify({"error": "Invalid date format"}), 400
             
-        temps = list(temperaturi.find(temp_query, {"_id": 1, "valoare": 1, "timestamp": 1}))
+        temps = list(temperaturi.find(temp_query))
         temperatures.extend(temps)
 
     return temperatures
@@ -121,10 +128,18 @@ def get_temperatures():
 
     # Check if no query parameters are provided
     if not lat and not lon and not from_date and not until_date:
-        temperatures = list(temperaturi.find({}, {"_id": 1, "valoare": 1, "timestamp": 1}))
+        temperatures = list(temperaturi.find())
         for temp in temperatures:
             temp["id"] = str(temp.pop("_id"))
-        return jsonify(temperatures), 200   
+        return jsonify(temperatures), 200
+    
+    # If we have latitude or longitude and they are not numbers
+    if (lat and not lat.replace(".", "").isdigit()) or (lon and not lon.replace(".", "").isdigit()):
+        return jsonify({"error": "Latitude and longitude must be numbers"}), 400
+    
+    # If we have from or until date and they are not in the correct format
+    if not check_correct_date_format(from_date, until_date):
+        return jsonify({"error": "Invalid date format"}), 400
     
     # Cities starts as all cities
     cities = list(orase.find({}, {"_id": 1}))
@@ -168,6 +183,10 @@ def get_city_temperatures(idOras):
     from_date = request.args.get("from")
     until_date = request.args.get("until")
 
+    # If we have from or until date and they are not in the correct format
+    if not check_correct_date_format(from_date, until_date):
+        return jsonify({"error": "Invalid date format"}), 400
+
     # Construct the query
     temp_query = {"idOras": idOras}
     temp_query = construct_date_query(from_date, until_date, temp_query)
@@ -176,7 +195,7 @@ def get_city_temperatures(idOras):
         return jsonify({"error": "Invalid date format"}), 400
 
     # Find the temperatures for the city
-    temperatures = list(temperaturi.find(temp_query, {"_id": 1, "valoare": 1, "timestamp": 1}))
+    temperatures = list(temperaturi.find(temp_query))
 
     # Check if no temperatures were found
     if not temperatures:
@@ -188,10 +207,6 @@ def get_city_temperatures(idOras):
 
 @tmp_bp.route('/api/temperatures/countries/<id_tara>', methods=['GET'])
 def get_country_temperatures(id_tara):
-    # print all countries in db
-    with open("log.txt", "a") as f:
-        f.write(f"{list(tari.find({}, {'_id': 1}))}\n")
-    
     # Check if the id is valid
     if not is_valid_id(id_tara):
         return jsonify({"error": "Invalid country ID"}), 400
@@ -200,30 +215,20 @@ def get_country_temperatures(id_tara):
     country = find_entity_by_id(id_tara, "country")
     if not country:
         return jsonify([]), 200
-    
-    with open("log.txt", "a") as f:
-        f.write(f"Found country: {country}\n")
-
-    # Log all the cities and their country id
-    with open("log.txt", "a") as f:
-        f.write("All the cities in the database:\n")
-        f.write(f"{list(orase.find({}, {'_id': 1, 'idTara': 1}))}\n")
 
     # Find all cities in the country
     cities = list(orase.find({"idTara": id_tara}, {"_id": 1}))
-
-    with open("log.txt", "a") as f:
-        f.write(f"Found cities: {cities}\n")
 
     # Parse the query parameters for date filtering
     from_date = request.args.get("from")
     until_date = request.args.get("until")
 
+    # If we have from or until date and they are not in the correct format
+    if not check_correct_date_format(from_date, until_date):
+        return jsonify({"error": "Invalid date format"}), 400
+
     # Foe each city in the list, find the temperatures
     temperatures = find_temperatures_for_cities(cities, from_date, until_date)
-
-    with open("log.txt", "a") as f:
-        f.write(f"Found temperatures: {temperatures}\n")
 
     # Check if no temperatures were found
     if not temperatures:
@@ -251,6 +256,10 @@ def update_temperature(id):
 
     # Update the temperature with the specified ID
     result = temperaturi.update_one({"_id": ObjectId(id)}, {"$set": data})
+
+    # Check if the temperature was found and updated
+    if result.matched_count == 0:
+        return jsonify({"error": "Temperature not found"}), 404
 
     # Translate the idOras field to idOras
     data["idOras"] = data.pop("idOras")

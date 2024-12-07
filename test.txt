@@ -1,1 +1,1 @@
-{'error': 'Missing required fields'}
+[{'id': '67545ed6cdb14a45453d05b7', 'timestamp': '2024-12-07T14:42:30.419000', 'valoare': 22.5}, {'id': '67545ed6cdb14a45453d05b8', 'timestamp': '2024-12-07T14:42:30.428000', 'valoare': 23.0}, {'id': '67545ed6cdb14a45453d05bb', 'timestamp': '2024-12-07T14:42:30.458000', 'valoare': 25.0}]
