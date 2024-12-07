@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from bson.objectid import ObjectId
-from models import orase, tari
+from models import orase, tari, temperaturi
 
 cntrs_bp = Blueprint('countries', __name__)
 template_fields = {"_id": 1, "nume": 1, "lat": 1, "long": 1}
@@ -37,9 +37,6 @@ def add_country():
     # Check if the country already exists and return an error if it does
     if tari.find_one({"nume": data["nume"]}):
         return jsonify({"error": "Country already exists"}), 409
-
-    with open("log.txt", "a") as f:
-        f.write(f"Data: {data}\n")
 
     # Insert the new country into the database
     result = tari.insert_one(data)
@@ -91,6 +88,10 @@ def update_country(id):
 
 @cntrs_bp.route('/api/countries/<id>', methods=['DELETE'])
 def delete_country(id):
+    # Check if id only contains alphanumeric characters
+    if not id.isalnum():
+        return jsonify({"error": "ID must contain only alphanumeric characters"}), 400
+    
     # Check for 400 error; return 404 postman test with id 1001
     if not is_valid_id(id):
         return jsonify({"error": "Invalid ID"}), 404

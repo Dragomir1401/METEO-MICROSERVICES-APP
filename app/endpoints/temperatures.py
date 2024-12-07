@@ -48,9 +48,13 @@ def add_temperature():
     # Check if the city exists
     if not find_entity_by_id(data["idOras"], "city"):
         return jsonify({"error": "City not found"}), 404
+    
+    # Check if temperature is a number
+    if not isinstance(data["valoare"], (int, float)):
+        return jsonify({"error": "Temperature is not a number"}), 400
 
     # Add the timestamp to the data
-    data["timestamp"] = datetime.utcnow()
+    data["timestamp"] = datetime.now()
 
     # Check if the temperature already exists for this timestamp
     if temperaturi.find_one({"idOras": data["idOras"], "timestamp": data["timestamp"]}):
@@ -62,7 +66,7 @@ def add_temperature():
     # Return the ID of the newly inserted temperature
     return jsonify({"id": str(result.inserted_id)}), 201
 
-def construct_date_qurery(from_date, until_date, temp_query):
+def construct_date_query(from_date, until_date, temp_query):
     # Construct the timestamp query
     if from_date or until_date:
         temp_query["timestamp"] = {}
@@ -84,13 +88,29 @@ def format_temperature_response(temperatures):
     response = [
         {
             "id": str(temp["_id"]),
-            "valoare": temp["valoare"],
             "timestamp": temp["timestamp"].isoformat()
         }
         for temp in temperatures
     ]
 
     return jsonify(response), 200
+
+
+def find_temperatures_for_cities(cities, from_date, until_date):
+    temperatures = []
+    for city in cities:
+        temp_query = {"idOras": str(city["_id"])}
+
+        if from_date or until_date:
+            temp_query = construct_date_query(from_date, until_date, temp_query)
+
+            if temp_query == -1:
+                return jsonify({"error": "Invalid date format"}), 400
+            
+        temps = list(temperaturi.find(temp_query, {"_id": 1, "valoare": 1, "timestamp": 1}))
+        temperatures.extend(temps)
+
+    return temperatures
 
 @tmp_bp.route('/api/temperatures', methods=['GET'])
 def get_temperatures():
@@ -106,43 +126,28 @@ def get_temperatures():
             temp["id"] = str(temp.pop("_id"))
         return jsonify(temperatures), 200   
     
-    city_id = None
+    # Cities starts as all cities
+    cities = list(orase.find({}, {"_id": 1}))
     if lat or lon:
         # Find the city based on latitude and/or longitude
         city_query = {}
         if lat:
-            city_query["latitudine"] = float(lat)
+            city_query["lat"] = float(lat)
         if lon:
-            city_query["longitudine"] = float(lon)
+            city_query["lon"] = float(lon)
 
-        # Run the query
-        city = orase.find_one(city_query)
+        # Find all the cities with the specified latitude and longitude
+        cities = list(orase.find(city_query, {"_id": 1}))
 
-        # Check if the city was found return empty list
-        if not city:
-            return jsonify([]), 200
-
-        # Extract the city ID from ObjectId
-        city_id = str(city["_id"])
-
-    # Find temperatures for the city
-    if city_id is None:
-        temp_query = {}
-    else:
-        temp_query = {"idOras": city_id}
-
-    # Construct the timestamp query
-    temp_query = construct_date_qurery(from_date, until_date, temp_query)
-
-    # Check if construct timestamp query failed
-    if temp_query == -1:
-        return jsonify({"error": "Invalid date format"}), 400
-
-    temperatures = list(temperaturi.find(temp_query, {"_id": 1, "valoare": 1, "timestamp": 1}))
+    # Check if the city was found return empty list
+    if not cities:
+        return jsonify([]), 200
+    
+    # For each city in the list, find the temperatures
+    temperatures = find_temperatures_for_cities(cities, from_date, until_date)
 
     # Check if no temperatures were found
     if not temperatures:
-        # Return empty list
         return jsonify([]), 200
 
     # Format the response
@@ -165,7 +170,7 @@ def get_city_temperatures(idOras):
 
     # Construct the query
     temp_query = {"idOras": idOras}
-    temp_query = construct_date_qurery(from_date, until_date, temp_query)
+    temp_query = construct_date_query(from_date, until_date, temp_query)
 
     if temp_query == -1:
         return jsonify({"error": "Invalid date format"}), 400
@@ -183,6 +188,10 @@ def get_city_temperatures(idOras):
 
 @tmp_bp.route('/api/temperatures/countries/<id_tara>', methods=['GET'])
 def get_country_temperatures(id_tara):
+    # print all countries in db
+    with open("log.txt", "a") as f:
+        f.write(f"{list(tari.find({}, {'_id': 1}))}\n")
+    
     # Check if the id is valid
     if not is_valid_id(id_tara):
         return jsonify({"error": "Invalid country ID"}), 400
@@ -191,27 +200,33 @@ def get_country_temperatures(id_tara):
     country = find_entity_by_id(id_tara, "country")
     if not country:
         return jsonify([]), 200
+    
+    with open("log.txt", "a") as f:
+        f.write(f"Found country: {country}\n")
+
+    # Log all the cities and their country id
+    with open("log.txt", "a") as f:
+        f.write("All the cities in the database:\n")
+        f.write(f"{list(orase.find({}, {'_id': 1, 'idTara': 1}))}\n")
+
+    # Find all cities in the country
+    cities = list(orase.find({"idTara": id_tara}, {"_id": 1}))
+
+    with open("log.txt", "a") as f:
+        f.write(f"Found cities: {cities}\n")
 
     # Parse the query parameters for date filtering
     from_date = request.args.get("from")
     until_date = request.args.get("until")
 
-    # Find the cities for the country
-    cities = list(orase.find({"id_tara": id_tara}, {"_id": 1}))
+    # Foe each city in the list, find the temperatures
+    temperatures = find_temperatures_for_cities(cities, from_date, until_date)
 
-    # Construct the query
-    temp_query = {"idOras": {"$in": [str(city["_id"]) for city in cities]}}
-    temp_query = construct_date_qurery(from_date, until_date, temp_query)
-
-    if temp_query == -1:
-        return jsonify({"error": "Invalid date format"}), 400
-
-    # Find the temperatures for the country
-    temperatures = list(temperaturi.find(temp_query, {"_id": 1, "valoare": 1, "timestamp": 1}))
+    with open("log.txt", "a") as f:
+        f.write(f"Found temperatures: {temperatures}\n")
 
     # Check if no temperatures were found
     if not temperatures:
-        # Return empty list
         return jsonify([]), 200
 
     # Format the response
@@ -245,9 +260,13 @@ def update_temperature(id):
 
 @tmp_bp.route('/api/temperatures/<id>', methods=['DELETE'])
 def delete_temperature(id):
+    # Check if id only contains alphanumeric characters
+    if not id.isalnum():
+        return jsonify({"error": "ID must contain only alphanumeric characters"}), 400
+
     # Check if the id is valid
     if not is_valid_id(id):
-        return jsonify({"error": "Invalid temperature ID"}), 400
+        return jsonify({"error": "Invalid temperature ID"}), 404
 
     # Delete the temperature with the specified ID
     result = temperaturi.delete_one({"_id": ObjectId(id)})

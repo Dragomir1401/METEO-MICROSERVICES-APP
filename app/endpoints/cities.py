@@ -137,6 +137,10 @@ def update_city(id):
 
 @ct_bp.route('/api/cities/<id>', methods=['DELETE'])
 def delete_city(id):
+    # Check if id only contains alphanumeric characters
+    if not id.isalnum():
+        return jsonify({"error": "ID must contain only alphanumeric characters"}), 400
+    
     # Check if id is a valid ObjectId
     if not is_valid_id(id):
         return jsonify({"error": "Invalid city ID"}), 404
