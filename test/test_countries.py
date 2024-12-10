@@ -2,20 +2,16 @@ import unittest
 import requests
 
 COUNTRIES_URL = "http://localhost:5001/api/countries"
+CITIES_URL = "http://loclhost:5001/api/cities"
+TEMPERATURES_URL = "http://localhost:5001/api/temperatures"
 
 class TestCountriesAPI(unittest.TestCase):
     def setUp(self):
-        # Clear all countries
+        # Clear all countries, cities and temperatures
         clear_response = requests.delete(f"{COUNTRIES_URL}/clear")
         self.assertEqual(clear_response.status_code, 200, "Failed to clear countries")
-
-        # Clear all cities
-        CITIES_URL = "http://localhost:5001/api/cities"
         clear_response = requests.delete(f"{CITIES_URL}/clear")
         self.assertEqual(clear_response.status_code, 200, "Failed to clear cities")
-
-        # Clear all temperatures
-        TEMPERATURES_URL = "http://localhost:5001/api/temperatures"
         clear_response = requests.delete(f"{TEMPERATURES_URL}/clear")
         self.assertEqual(clear_response.status_code, 200, "Failed to clear temperatures")
 

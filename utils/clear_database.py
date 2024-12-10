@@ -1,14 +1,12 @@
 from pymongo import MongoClient
 
 def clear_database():
-    # Connect to MongoDB
-    client = MongoClient("mongodb://localhost:27017/")  # Change if running on a different host/port
+    # MongoDB connection
+    client = MongoClient("mongodb://localhost:27017/")
     db = client["weather_db"]
-
-    # Get all collections in the database
     collections = db.list_collection_names()
 
-    # Clear each collection
+    # Collection clearing
     for collection in collections:
         result = db[collection].delete_many({})
         print(f"Cleared {result.deleted_count} entries from collection '{collection}'.")
