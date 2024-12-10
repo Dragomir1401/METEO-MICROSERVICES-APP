@@ -10,7 +10,7 @@ services:
     volumes:
       - ./app:/app
     networks:
-      - app_network
+      - api_network
     depends_on:
       - db
     environment:
@@ -24,7 +24,7 @@ services:
     ports:
       - "${DB_PORT:-27017}:27017"
     networks:
-      - app_network
+      - api_network
 
   mongo-express:
     image: mongo-express:1.0.0-alpha.4
@@ -34,12 +34,14 @@ services:
     environment:
       - ME_CONFIG_MONGODB_SERVER=db
     networks:
-      - app_network
+      - db_util_network
     depends_on:
       - db
 
 networks:
-  app_network:
+  api_network:
+    driver: bridge
+  db_util_network:
     driver: bridge
 
 volumes:
