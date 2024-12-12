@@ -4,6 +4,8 @@
 
 This project implements a weather data management system using a **Python Flask REST API** connected to a **MongoDB database**, containerized with **Docker**. The solution handles geographical data (countries, cities, temperatures) and provides a suite of API routes for managing these entities.
 
+### ⚠️ **Important:** Before running the Postman test collection make sure you run python3 utils/clear_database.py to clear all entries first if database does not start as fresh.
+
 ## How to Build & Run
 
 This project uses **Docker Compose** to manage and orchestrate the containers for the REST API, MongoDB database, and a MongoDB management utility (Mongo Express). Below are detailed steps on how to build and run the application.
@@ -22,8 +24,8 @@ The `docker-compose.yml` file is designed to follow best practices for container
 
 - **`db`**:
 
-  - MongoDB instance for storing the application's data, such as countries, cities, and temperatures.
-  - Accessible from both the Flask API (`api`) and Mongo Express (`mongo-express`) through the `shared_network` and `db_network`, respectively.
+  - MongoDB instance for storing the apps data, such as countries, cities, and temperatures.
+  - Accessible from both the Flask API (`api`) and Mongo Express (`mongo-express`) through the `shared_network` and `db_network`.
   - Uses a persistent volume `mongo_data` to retain data across container restarts.
 
 - **`mongo-express`**:
@@ -148,7 +150,9 @@ Persistent volumes are used to retain critical application data:
 - **GET** `/api/cities`: Retrieve all cities.
 - **GET** `/api/cities/country/:id_Tara`: Retrieve cities by country.
 - **PUT** `/api/cities/:id`: Update a city.
+  **Note**: Id can also be provided in the body and in the path. The one in the path will be prioritised so a good id in the path and a bad one in body will yield a good result.
   **Body**: `{ "id": "Int", "idTara": "Int", "nume": "Str", "lat": "Double", "lon": "Double" }`
+
 - **DELETE** `/api/cities/:id`: Delete a city.
 
 ### Temperatures
@@ -203,8 +207,8 @@ Persistent volumes are used to retain critical application data:
 ## Test options
 
 - **Utils**
-  --**utils/clear_database.py** - removes all entries from database
-  --**utils/drop_indexes.py** - drops the tables in the database
+  _python3_ **utils/clear_database.py** - removes all entries from database
+  _python3_ **utils/drop_indexes.py** - drops the tables in the database
 
 - **JSON tests** - tests/colletion/tests.json - can be imported in Postman or other similar application
 
