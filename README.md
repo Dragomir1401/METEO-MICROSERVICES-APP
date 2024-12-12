@@ -10,21 +10,102 @@ This project uses **Docker Compose** to manage and orchestrate the containers fo
 
 ### Docker Compose Overview
 
-The `docker-compose.yml` file is configured as follows:
+The `docker-compose.yml` file is designed to follow best practices for containerized application development, including logical network separation, environment variable usage, and persistent storage. Here's a detailed breakdown of the setup:
 
-- **Services**:
+#### **Services**
 
-  - **api**: Flask REST API service that connects to MongoDB.
-  - **db**: MongoDB database for storing application data.
-  - **mongo-express**: Web interface to manage MongoDB.
+- **`api`**:
 
-- **Networks**:
+  - A Flask-based REST API that provides endpoints for managing countries, cities, and temperatures.
+  - Connects to MongoDB (`db`) via the shared `shared_network`.
+  - Exposed on port `5001` (configurable via the `API_PORT` environment variable).
 
-  - `api_network`: Connects the Flask API and MongoDB.
-  - `db_util_network`: Connects Mongo Express to MongoDB for database management.
+- **`db`**:
 
-- **Volumes**:
-  - `mongo_data`: Persistent volume to store MongoDB data.
+  - MongoDB instance for storing the application's data, such as countries, cities, and temperatures.
+  - Accessible from both the Flask API (`api`) and Mongo Express (`mongo-express`) through the `shared_network` and `db_network`, respectively.
+  - Uses a persistent volume `mongo_data` to retain data across container restarts.
+
+- **`mongo-express`**:
+  - A web-based UI to interact with the MongoDB database.
+  - Runs on port `8081` (configurable via the `MONGO_EXPRESS_PORT` environment variable).
+  - Connects to MongoDB (`db`) via the `db_network`.
+
+---
+
+#### **Networks**
+
+To ensure clear separation of concerns and enhance security, the application uses multiple Docker networks:
+
+- **`api_network`**:
+
+  - Dedicated network for the API service to communicate with other internal services.
+  - Provides logical isolation for the API from other utility services like `mongo-express`.
+
+- **`db_network`**:
+
+  - Dedicated network for the database (`db`) and `mongo-express`.
+  - Isolates the database management tool (`mongo-express`) from the API.
+
+- **`shared_network`**:
+  - A shared network that enables the API (`api`) to communicate with the database (`db`) while keeping the `mongo-express` service isolated.
+
+By using these networks, each service only has access to the resources it needs, minimizing potential security risks.
+
+---
+
+#### **Environment Variables**
+
+To enhance flexibility and ease of deployment across different environments (e.g., development, staging, production), the following environment variables are used:
+
+- **`API_PORT`**: Configures the exposed port for the Flask API (default: `5001`).
+- **`DB_PORT`**: Configures the exposed port for MongoDB (default: `27017`).
+- **`MONGO_EXPRESS_PORT`**: Configures the exposed port for Mongo Express (default: `8081`).
+- **`APP_ENV`**: Specifies the environment mode for the API (e.g., `development`, `production`). Default is `development`.
+
+These variables can be set in a `.env` file or passed directly as environment variables when running Docker Compose.
+
+---
+
+#### **Volumes**
+
+Persistent volumes are used to retain critical application data:
+
+- **`mongo_data`**:
+  - Stores MongoDB data, ensuring that it is not lost when the container restarts or is recreated.
+  - Mapped to the `/data/db` directory in the MongoDB container.
+
+---
+
+#### **Best Practices Implemented**
+
+1. **Logical Network Separation**:
+
+   - Services are grouped into networks based on their interaction requirements, ensuring minimal exposure.
+   - The `api` and `db` services communicate through the `shared_network`, while `mongo-express` is isolated in `db_network`.
+
+2. **DNS-Based Service Discovery**:
+
+   - Containers refer to each other by their service names (e.g., `db`) instead of hardcoded IP addresses, enabling seamless integration and portability.
+
+3. **Environment Variables**:
+
+   - Port configurations and other settings are externalized for easy customization and flexibility across different environments.
+
+4. **Data Persistence**:
+   - MongoDB data is stored in a persistent Docker volume (`mongo_data`) to prevent data loss during container restarts.
+
+---
+
+#### **How to Run**
+
+1. Create a `.env` file in the project root with the following content (example values):
+   ```env
+   API_PORT=5001
+   DB_PORT=27017
+   MONGO_EXPRESS_PORT=8081
+   APP_ENV=development
+   ```
 
 ### Prerequisites
 
