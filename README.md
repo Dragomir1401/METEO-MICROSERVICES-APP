@@ -4,7 +4,14 @@
 
 This project implements a weather data management system using a **Python Flask REST API** connected to a **MongoDB database**, containerized with **Docker**. The solution handles geographical data (countries, cities, temperatures) and provides a suite of API routes for managing these entities.
 
-### ⚠️ **Important:** Before running the Postman test collection make sure you run python3 utils/clear_database.py to clear all entries first if database does not start as fresh.
+#### ⚠️ **Important:** Before running docker-compose up make sure you dont have existing containers with names: flask_api, mongo_db, mongo_express
+
+- **`If so, remove them first`**
+  **`docker rm -f flask_api`**
+  **`docker rm -f mongo_db`**
+  **`docker rm -f mongo_express`**
+
+#### ⚠️ **Important:** Before running the Postman test collection make sure you run python3 utils/clear_database.py to clear all entries first if database does not start as fresh.
 
 ## How to Build & Run
 
@@ -99,7 +106,7 @@ Persistent volumes are used to retain critical application data:
 
 ---
 
-#### **How to Run**
+## **How to Run**
 
 1. Create a `.env` file in the project root with the following content (example values):
    ```env
