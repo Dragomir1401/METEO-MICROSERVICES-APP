@@ -11,10 +11,12 @@ services:
       - ./app:/app
     networks:
       - api_network
+      - shared_network # Shared network with db
     depends_on:
       - db
     environment:
       - MONGO_URI=mongodb://db:27017
+      - APP_ENV=${APP_ENV:-development}
 
   db:
     image: mongo:6.0
@@ -24,7 +26,8 @@ services:
     ports:
       - "${DB_PORT:-27017}:27017"
     networks:
-      - api_network
+      - db_network
+      - shared_network # Shared network with api
 
   mongo-express:
     image: mongo-express:1.0.0-alpha.4
@@ -34,14 +37,16 @@ services:
     environment:
       - ME_CONFIG_MONGODB_SERVER=db
     networks:
-      - db_util_network
+      - db_network
     depends_on:
       - db
 
 networks:
   api_network:
     driver: bridge
-  db_util_network:
+  db_network:
+    driver: bridge
+  shared_network: # Shared network for db and api
     driver: bridge
 
 volumes:

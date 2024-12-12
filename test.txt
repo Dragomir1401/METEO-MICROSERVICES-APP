@@ -1,1 +1,1 @@
-[{'id': '67585cdfd242628ef00d41bf', 'timestamp': '2024-12-10T15:23:11.061000', 'valoare': 22.5}, {'id': '67585cdfd242628ef00d41c0', 'timestamp': '2024-12-10T15:23:11.071000', 'valoare': 23.0}, {'id': '67585cdfd242628ef00d41c3', 'timestamp': '2024-12-10T15:23:11.099000', 'valoare': 25.0}]
+[{'id': '675ad5f8facaf66f3f3486bb', 'timestamp': '2024-12-12T12:24:24.007000', 'valoare': 22.5}, {'id': '675ad5f8facaf66f3f3486bc', 'timestamp': '2024-12-12T12:24:24.015000', 'valoare': 23.0}, {'id': '675ad5f8facaf66f3f3486bf', 'timestamp': '2024-12-12T12:24:24.040000', 'valoare': 25.0}]

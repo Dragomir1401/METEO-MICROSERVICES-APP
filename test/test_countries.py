@@ -2,7 +2,7 @@ import unittest
 import requests
 
 COUNTRIES_URL = "http://localhost:5001/api/countries"
-CITIES_URL = "http://loclhost:5001/api/cities"
+CITIES_URL = "http://localhost:5001/api/cities"
 TEMPERATURES_URL = "http://localhost:5001/api/temperatures"
 
 class TestCountriesAPI(unittest.TestCase):
