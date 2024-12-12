@@ -106,6 +106,7 @@ Persistent volumes are used to retain critical application data:
    MONGO_EXPRESS_PORT=8081
    APP_ENV=development
    ```
+   Or use the one provided in the repo.
 
 ### Prerequisites
 
